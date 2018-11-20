@@ -6,8 +6,10 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Path;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,22 +26,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fx504.praktikum.R;
+import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
-import com.example.fx504.praktikum.model.ResponseAdd;
-import com.github.barteksc.pdfviewer.PDFView;
+import com.example.fx504.praktikum.model.RespAddNovel;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
-import retrofit2.Call;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddNovel extends AppCompatActivity {
 
     APIService apiService;
-
-    Intent intent;
 
     TextView tv_statusAdd;
     ImageView iv_novelCover;
@@ -51,21 +54,21 @@ public class AddNovel extends AppCompatActivity {
     EditText et_novelTitle;
     EditText et_novelDesc;
 
-    PDFView pdf_view;
-
     static final int CODE_IMAGE = 1000;
     static final int CODE_PDF = 2000;
 
     String Genre;
-    Uri PDF;
+    String ImgCover;
+    String PDF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_noveladd);
 
+        apiService = APIClient.getService();
+
         spin_genre     = findViewById(R.id.spin_genre);
-        pdf_view       = findViewById(R.id.pdf_view);
         iv_novelCover  = findViewById(R.id.iv_novelCover);
         tv_statusAdd   = findViewById(R.id.tv_statusAdd);
 
@@ -148,8 +151,8 @@ public class AddNovel extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("application/pdf");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("application/pdf");
                 startActivityForResult(Intent.createChooser(intent,"Select PDF"),CODE_PDF);
             }
         });
@@ -161,6 +164,7 @@ public class AddNovel extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == CODE_IMAGE) {
                 Uri returnUri = data.getData();
+                String pathImg = returnUri.getPath();
                 Bitmap bitmapImage = null;
                 try {
                     bitmapImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), returnUri);
@@ -168,15 +172,16 @@ public class AddNovel extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 iv_novelCover.setImageBitmap(bitmapImage);
+                getBitmapImg(pathImg);
+                tv_statusAdd.setText(pathImg);
             }
-            if (requestCode == CODE_PDF){ 
-                intent = new Intent();
-                Uri pdfFoleder = data.getData();
-                getUriPDF(pdfFoleder);
+            if (requestCode == CODE_PDF){
+                Uri pdfFolder = data.getData();
+                String pathPDF = pdfFolder.getPath();
+                getUriPDF(pathPDF);
 //
-
                 if (!data.equals("")){
-                    tv_statusAdd.setText("Data Tersimpan");
+                    tv_statusAdd.setText(""+pathPDF);
                     tv_statusAdd.setTextColor(this.getResources().getColor(R.color.colorUpdate));
 
                 }else {
@@ -194,18 +199,57 @@ public class AddNovel extends AppCompatActivity {
             public void onClick(View v) {
                 final String novel_title = et_novelTitle.getText().toString();
                 final String novel_synopsis = et_novelDesc.getText().toString();
-                if (!novel_title.equals("") && !novel_synopsis.equals("") && PDF!=null && !Genre.equals("")){
-                    apiService.AddNovel(novel_title,Genre,novel_synopsis,PDF.getPath())
-                            .enqueue(new Callback<ResponseAdd>() {
+                if (!novel_title.equals("") && !novel_synopsis.equals("") && PDF!=null
+                        && !Genre.equals("") && ImgCover !=null){
+
+//                    apiService.AddNovel(novel_title,Genre,novel_synopsis,PDF.getPath())
+//                            .enqueue(new Callback<ResponseAdd>() {
+//                                @Override
+//                                public void onResponse(Call<ResponseAdd> call, Response<ResponseAdd> response) {
+//                                    if (response.isSuccessful()){
+//                                        Toast.makeText(AddNovel.this, "Data Suskses tersimpan", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//                                @Override
+//                                public void onFailure(Call<ResponseAdd> call, Throwable t) {
+//                                    Toast.makeText(AddNovel.this, "Terjadi kesalahan", Toast.LENGTH_SHORT).show();
+//                                    Log.wtf("errorAdd",t);
+//                                }
+//                            });
+
+                    File pathPDF = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+                    pathPDF.mkdir();
+
+                    File pathImg = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                    pathImg.mkdir();
+
+                    File file = new File(pathPDF, String.valueOf(PDF));
+                    File img = new File(pathImg, String.valueOf(ImgCover));
+
+                    RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"),file);
+                    RequestBody reqImg = RequestBody.create(MediaType.parse("multipart/form-data"),img);
+
+                    RequestBody title = RequestBody.create(MultipartBody.FORM,novel_title);
+                    RequestBody genre = RequestBody.create(MultipartBody.FORM,Genre);
+                    RequestBody synopsis = RequestBody.create(MultipartBody.FORM,novel_synopsis);
+                    MultipartBody.Part pdfFile = MultipartBody.Part.createFormData("StoryFile",file.getName(),reqFile);
+                    MultipartBody.Part imgFile = MultipartBody.Part.createFormData("ImgCover",img.getName(),reqImg);
+
+                    apiService.NewNovels(title,genre,synopsis,pdfFile,imgFile)
+                            .enqueue(new Callback<RespAddNovel>() {
                                 @Override
-                                public void onResponse(Call<ResponseAdd> call, Response<ResponseAdd> response) {
+                                public void onResponse(retrofit2.Call<RespAddNovel> call, Response<RespAddNovel> response) {
                                     if (response.isSuccessful()){
                                         Toast.makeText(AddNovel.this, "Data Suskses tersimpan", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(AddNovel.this, "Gagal Menyimpan", Toast.LENGTH_SHORT).show();
                                     }
                                 }
+
                                 @Override
-                                public void onFailure(Call<ResponseAdd> call, Throwable t) {
-                                    Toast.makeText(AddNovel.this, "Terjadi kesalahan", Toast.LENGTH_SHORT).show();
+                                public void onFailure(retrofit2.Call<RespAddNovel> call, Throwable t) {
+                                    Toast.makeText(AddNovel.this, "Sistem Error "+t, Toast.LENGTH_SHORT).show();
+                                    Log.wtf("errorAdd",t);
                                 }
                             });
                 }else {
@@ -219,10 +263,11 @@ public class AddNovel extends AppCompatActivity {
     private void getGenre(String genre){
         Genre = genre;
     }
-    private void getUriPDF(Uri uri){
-        PDF = uri;
+    private void getUriPDF(String uri){
+        PDF = "document/mylife.pdf";
     }
-
-
+    private void getBitmapImg(String img){
+        ImgCover = "image/mylife.jpeg";
+    }
 
 }

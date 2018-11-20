@@ -1,13 +1,18 @@
 package com.example.fx504.praktikum.api;
 
+import com.example.fx504.praktikum.model.RespAddNovel;
 import com.example.fx504.praktikum.model.ResponseAdd;
 import com.example.fx504.praktikum.model.ResponseApi;
 import com.example.fx504.praktikum.model.ResponseLogin;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 public interface APIService {
 
@@ -31,4 +36,11 @@ public interface APIService {
                               @Field("novel_synopsis") String novel_synopsis,
                               @Field("novel_story") String novel_story);
 
+    @Multipart
+    @POST("addNovel")
+    Call<RespAddNovel>NewNovels(@Part("novel_title") RequestBody novel_title,
+                                @Part("novel_genre") RequestBody novel_genre,
+                                @Part("novel_synopsis") RequestBody novel_synopsis,
+                                @Part MultipartBody.Part novel_story,
+                                @Part MultipartBody.Part novel_cover);
 }
