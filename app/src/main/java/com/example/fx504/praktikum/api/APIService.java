@@ -1,5 +1,6 @@
 package com.example.fx504.praktikum.api;
 
+import com.example.fx504.praktikum.model.Addnovel;
 import com.example.fx504.praktikum.model.RespAddNovel;
 import com.example.fx504.praktikum.model.ResponseAdd;
 import com.example.fx504.praktikum.model.ResponseApi;
@@ -43,4 +44,9 @@ public interface APIService {
                                 @Part("novel_synopsis") RequestBody novel_synopsis,
                                 @Part MultipartBody.Part novel_story,
                                 @Part MultipartBody.Part novel_cover);
+    @Multipart
+    @POST("addNovel")
+    Call<Addnovel>noveleee(@Part("novel_title")RequestBody novel_title,
+                           @Part MultipartBody.Part novel_cover);
+
 }
