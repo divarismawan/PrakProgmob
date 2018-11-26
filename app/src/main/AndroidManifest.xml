@@ -13,26 +13,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.Condition" >
+        <activity android:name=".activities.ConditionActivity" >
 
         </activity>
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.MainActivity">
-
-        </activity>
-        <activity android:name=".activities.FullScreenActivity" />
-        <activity android:name=".activities.InfoNovelActivity" />
-        <activity android:name=".admin.AddNovel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".admin.HomeAdmin"></activity>
+        <activity android:name=".activities.FullScreenActivity" />
+        <activity android:name=".activities.InfoNovelActivity" />
+        <activity android:name=".admin.AddNovel"/>
+        <activity android:name=".admin.HomeAdmin"/>
         <activity android:name=".activities.NovelReadActivity" />
-        <activity android:name=".activities.GenreActivity"></activity>
+        <activity android:name=".activities.GenreActivity"/>
+
         <service android:name=".MessagingService"
             android:stopWithTask="false">
             <intent-filter>

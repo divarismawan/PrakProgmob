@@ -1,21 +1,17 @@
 package com.example.fx504.praktikum.admin;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Path;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -35,12 +31,9 @@ import android.widget.Toast;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
-import com.example.fx504.praktikum.model.Addnovel;
 import com.example.fx504.praktikum.model.RespAddNovel;
 
-import org.apache.commons.io.FilenameUtils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -49,7 +42,6 @@ import java.util.regex.Pattern;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
@@ -67,14 +59,16 @@ public class AddNovel extends AppCompatActivity {
     EditText et_novelTitle;
     EditText et_novelDesc;
 
-    static final int CODE_IMAGE = 777;
-    static final int CODE_PDF = 2000;
+    static final int CODE_IMAGE = 100;
+    static final int CODE_PDF = 200;
 
     String Genre;
-    String imgPath;
     Uri PdfUri;
-    Uri ImgUri;
     MultipartBody.Part novel_cover;
+    MultipartBody.Part novel_story;
+
+    int startType;
+
 
 
     @Override
@@ -96,7 +90,7 @@ public class AddNovel extends AppCompatActivity {
 
 
         setSpin_genre();
-        changeImage();
+        getImageFromGallery();
         setBtn_addStory();
         setBtn_saveNovel();
     }
@@ -111,7 +105,7 @@ public class AddNovel extends AppCompatActivity {
             android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(spin_genre);
 
             // Set popupWindow height to 500px
-            popupWindow.setHeight(500);
+            popupWindow.setHeight(400);
         }
         catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
@@ -135,14 +129,16 @@ public class AddNovel extends AppCompatActivity {
         });
     }
 
+    //Get Permission access storage
     public static final int MY_PERMISSIONS_REQUEST_STORAGE= 1;
     private boolean checkStoragePermission() {
         if (ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+
+                ActivityCompat.requestPermissions(this, new String[]{
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_STORAGE);
             } else {
                 ActivityCompat.requestPermissions(this,
@@ -156,10 +152,10 @@ public class AddNovel extends AppCompatActivity {
     }
 
     //Add Image from gallery
-    public void changeImage () {
+    public void getImageFromGallery() {
         iv_novelCover.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View v) {
+                startType = CODE_IMAGE;
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkStoragePermission()) {
                         startGallery();
@@ -172,34 +168,44 @@ public class AddNovel extends AppCompatActivity {
         });
     }
 
+    //Get Image Only
     private void startGallery() {
-        Intent intent= new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,CODE_IMAGE);
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, CODE_IMAGE);
     }
 
     public void setBtn_addStory() {
         btn_addStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("application/pdf");
-                startActivityForResult(Intent.createChooser(intent,"Select PDF"),CODE_PDF);
+                startType = CODE_PDF;
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkStoragePermission()) {
+                        startPDF();
+                    }
+                }
+                else {
+                    startPDF();
+                }
             }
         });
+    }
+
+    public void startPDF(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/pdf");
+        startActivityForResult(Intent.createChooser(intent,"Select PDF"),CODE_PDF);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
-//        if () {
 
+        //get Image Uri data
             if (requestCode == CODE_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
                 Uri ImgUrl = data.getData();
-
-//                Bitmap bitmapImage = null;
                 try {
                     Bitmap bitmapImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), ImgUrl);
                     iv_novelCover.setImageBitmap(bitmapImage);
@@ -208,24 +214,31 @@ public class AddNovel extends AppCompatActivity {
                 }
 
                 String filePath = getRealPathFromURI_API19(this,ImgUrl);
-                File file = new File(filePath);
+                File fileImg = new File(filePath);
 
-                RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), fileImg);
 
-                novel_cover = MultipartBody.Part.createFormData("novel_cover", file.getName(), reqFile);
+                novel_cover = MultipartBody.Part.createFormData("novel_cover", fileImg.getName(), reqFile);
 
             }
 
-            if (requestCode == CODE_PDF){
+        //get PDF Uri data
+            if (requestCode == CODE_PDF && resultCode == RESULT_OK && data != null && data.getData() != null){
                 PdfUri = data.getData();
                 if (!data.equals("")){
                     tv_statusAdd.setText(PdfUri.getPath());
                     tv_statusAdd.setTextColor(this.getResources().getColor(R.color.colorUpdate));
+
+                    String filePath = getRealPathFromURI_API19(this,PdfUri);
+                    File filePdf = new File(filePath);
+
+                    RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), filePdf);
+
+                    novel_story = MultipartBody.Part.createFormData("novel_story", filePdf.getName(), reqFile);
                 }else {
                     tv_statusAdd.setText("Gagal Menyimpan");
                     tv_statusAdd.setTextColor(this.getResources().getColor(R.color.colorAllert));
                 }
-
         }
     }
 
@@ -236,81 +249,37 @@ public class AddNovel extends AppCompatActivity {
                 final String novel_title = et_novelTitle.getText().toString();
                 final String novel_synopsis = et_novelDesc.getText().toString();
 
-                if (!novel_title.equals("")){
+                if (!novel_title.equals("") && !novel_synopsis.equals("") && novel_story !=null
+                        && novel_cover !=null && !Genre.equals("")){
 
-                    //set data string to table tb_novel
                     RequestBody title = RequestBody.create(MultipartBody.FORM,novel_title);
+                    RequestBody genre = RequestBody.create(MultipartBody.FORM,Genre);
+                    RequestBody synopsis = RequestBody.create(MultipartBody.FORM,novel_synopsis);
 
-                    //test
-//                    tv_statusAdd.setText(ImgUri.getPath() + "S_Img : " + imgPath);
-//                    Toast.makeText(AddNovel.this, ImgUri.toString(), Toast.LENGTH_SHORT).show();
+                    apiService.NewNovels(title,genre,synopsis,novel_story,novel_cover)
+                            .enqueue(new Callback<RespAddNovel>() {
+                                @Override
+                                public void onResponse(retrofit2.Call<RespAddNovel> call, Response<RespAddNovel> response) {
+                                    if (response.isSuccessful()){
+                                        Toast.makeText(AddNovel.this, "Data Suskses tersimpan",
+                                                Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(AddNovel.this, "Gagal Menyimpan",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
 
-//                    //import imgPath from onActivityResult
-//                    File imgFile = new File(imgPath);
-//                    //request type file
-//                    RequestBody imgCover = RequestBody.create(MediaType.parse("image/*"), imgFile);
-//                    novel_cover = MultipartBody.Part.createFormData("novel_cover",
-//                            imgFile.getName(),imgCover);
+                                @Override
+                                public void onFailure(retrofit2.Call<RespAddNovel> call, Throwable t) {
+                                    Toast.makeText(AddNovel.this, "Sistem Error "+t,
+                                            Toast.LENGTH_SHORT).show();
 
-                    //upload to api service
-
-                    apiService.noveleee(title,novel_cover).enqueue(new Callback<Addnovel>() {
-                        @Override
-                        public void onResponse(Call<Addnovel> call, Response<Addnovel> response) {
-                            if (response.isSuccessful()){
-                                Toast.makeText(AddNovel.this, "Data Suskses tersimpan", Toast.LENGTH_SHORT).show();
-                            }else {
-                                Toast.makeText(AddNovel.this, "Gagal Menyimpan"+response.errorBody(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        @Override
-                        public void onFailure(Call<Addnovel> call, Throwable t) {
-                            Toast.makeText(AddNovel.this, "Error Menyimpan :"+t, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                                    Log.wtf("errorAdd",t);
+                                }
+                            });
                 }else {
                     Toast.makeText(AddNovel.this, "Masukan data", Toast.LENGTH_SHORT).show();
                 }
-//                if (!novel_title.equals("") && !novel_synopsis.equals("") && PDF!=null
-//                        && !Genre.equals("") && ImgCover !=null){
-//                    File pathPDF = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-//                    pathPDF.mkdir();
-//
-//                    File pathImg = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-//                    pathImg.mkdir();
-//
-//                    File file = new File(pathPDF, String.valueOf(PDF));
-//                    File img = new File(pathImg, String.valueOf(ImgCover));
-//
-//                    RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"),file);
-//                    RequestBody reqImg = RequestBody.create(MediaType.parse("multipart/form-data"),img);
-//
-//                    RequestBody title = RequestBody.create(MultipartBody.FORM,novel_title);
-//                    RequestBody genre = RequestBody.create(MultipartBody.FORM,Genre);
-//                    RequestBody synopsis = RequestBody.create(MultipartBody.FORM,novel_synopsis);
-//                    MultipartBody.Part pdfFile = MultipartBody.Part.createFormData("StoryFile",file.getName(),reqFile);
-//                    MultipartBody.Part imgFile = MultipartBody.Part.createFormData("ImgCover",img.getName(),reqImg);
-//
-//                    apiService.NewNovels(title,genre,synopsis,pdfFile,imgFile)
-//                            .enqueue(new Callback<RespAddNovel>() {
-//                                @Override
-//                                public void onResponse(retrofit2.Call<RespAddNovel> call, Response<RespAddNovel> response) {
-//                                    if (response.isSuccessful()){
-//                                        Toast.makeText(AddNovel.this, "Data Suskses tersimpan", Toast.LENGTH_SHORT).show();
-//                                    }else {
-//                                        Toast.makeText(AddNovel.this, "Gagal Menyimpan", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailure(retrofit2.Call<RespAddNovel> call, Throwable t) {
-//                                    Toast.makeText(AddNovel.this, "Sistem Error "+t, Toast.LENGTH_SHORT).show();
-//                                    Log.wtf("errorAdd",t);
-//                                }
-//                            });
-//                }else {
-//                    Toast.makeText(AddNovel.this, "Masukan data", Toast.LENGTH_SHORT).show();
-//                }
             }
         });
 
@@ -327,10 +296,12 @@ public class AddNovel extends AppCompatActivity {
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.READ_EXTERNAL_STORAGE)
                             == PackageManager.PERMISSION_GRANTED) {
-
-                        startGallery();
+                        if (startType == CODE_IMAGE){
+                            startGallery();
+                        }if (startType == CODE_PDF){
+                            startPDF();
+                        }
                     }
-
                 } else {
                     // Izin ditolak.
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
@@ -359,27 +330,8 @@ public class AddNovel extends AppCompatActivity {
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
-
-//                var cursor: Cursor? = null
-//                try {
-//                    cursor = context.contentResolver.query(uri, arrayOf(MediaStore.MediaColumns.DISPLAY_NAME),
-// null, null, null)
-//                    cursor!!.moveToNext()
-//                    val fileName = cursor.getString(0)
-//                    val path = Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName
-//                    if (!TextUtils.isEmpty(path)) {
-//                        return path
-//                    }
-//                } finally {
-//                    cursor?.close()
-//                }
-//                val id = DocumentsContract.getDocumentId(uri)
-//                if (id.startsWith("raw:")) {
-//                    return id.replaceFirst("raw:".toRegex(), "")
-//                }
-//                val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads"), java.lang.Long.valueOf(id))
-//                return getDataColumn(context, contentUri, null, null)
                 Cursor cursor = null;
+
                 try {
                     String[] s={MediaStore.MediaColumns.DISPLAY_NAME};
                     cursor = context.getContentResolver().query(uri,s,null,null,null);
@@ -442,8 +394,7 @@ public class AddNovel extends AppCompatActivity {
         return null;
     }
 
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
+    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";

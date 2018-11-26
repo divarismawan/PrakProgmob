@@ -13,7 +13,7 @@ import com.example.fx504.praktikum.admin.HomeAdmin;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.model.SharePref;
 
-public class Condition extends Activity {
+public class ConditionActivity extends Activity {
 
     int SET_TIMER = 1500;
     ImageView iv_logo;
@@ -52,16 +52,16 @@ public class Condition extends Activity {
                 
                 // Checking already login or not
                 if (token.equals("")){
-                    intent = new Intent(Condition.this, FullScreenActivity.class);
+                    intent = new Intent(ConditionActivity.this, FullScreenActivity.class);
                     startActivity(intent);
 
                 }else {
                     //Checking member or admin
                     int status = sharePref.getDataInt(SharePref.KEY_STATUS);
                     if (status==1){
-                        intent = new Intent(Condition.this, HomeAdmin.class);
+                        intent = new Intent(ConditionActivity.this, HomeAdmin.class);
                     }else {
-                        intent = new Intent(Condition.this, MainActivity.class);
+                        intent = new Intent(ConditionActivity.this, MainActivity.class);
                     }
                     startActivity(intent);
 

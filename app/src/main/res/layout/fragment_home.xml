@@ -12,8 +12,7 @@
         <ViewFlipper
             android:id="@+id/vf_novel"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/cat_eye">
+            android:layout_height="200dp">
         </ViewFlipper>
 
         <!--Favorite-->

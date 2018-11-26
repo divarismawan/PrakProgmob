@@ -1,5 +1,8 @@
 package com.example.fx504.praktikum.model;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Novel {
     private String Title;
     private String Genre;

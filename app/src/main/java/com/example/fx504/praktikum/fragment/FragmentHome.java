@@ -78,7 +78,7 @@ public class FragmentHome extends Fragment {
         vf_novel.setOutAnimation(getContext(), android.R.anim.slide_out_right);
     }
 
-    //-----------------------------------------------------------//
+    //------------------PAGE Fav-----------------------//
 
     public void setFav(View v){
         RecyclerView recyclerView;
@@ -100,7 +100,7 @@ public class FragmentHome extends Fragment {
         recyclerView.setAdapter(novelAdapter);
     }
 
-    //-----------------------------------------------------------//
+    //---------------------New Update Novel--------------------------//
 
     public void setNovelUpdate(View v){
         RecyclerView recyclerView;
@@ -108,7 +108,7 @@ public class FragmentHome extends Fragment {
 
         myNovel = new ArrayList<>();
 
-        for (int i =0; i<6; i++){
+        for (int i =0; i<3; i++){
             myNovel.add(new Novel("Search Love", "Romance", "About someone who always find another to fix hem",R.drawable.n_searchlove));
             myNovel.add(new Novel("Aullido", "Horror", "Description this Novel",R.drawable.n_aullido));
         }

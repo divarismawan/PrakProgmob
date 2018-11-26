@@ -1,8 +1,6 @@
 package com.example.fx504.praktikum.api;
 
-import com.example.fx504.praktikum.model.Addnovel;
 import com.example.fx504.praktikum.model.RespAddNovel;
-import com.example.fx504.praktikum.model.ResponseAdd;
 import com.example.fx504.praktikum.model.ResponseApi;
 import com.example.fx504.praktikum.model.ResponseLogin;
 
@@ -30,13 +28,6 @@ public interface APIService {
     Call<ResponseLogin>LoginUser(@Field("user_email") String user_email,
                                  @Field("user_pass") String user_pass);
 
-    @FormUrlEncoded
-    @POST("addNovel")
-    Call<ResponseAdd>AddNovel(@Field("novel_title") String novel_title,
-                              @Field("novel_genre") String novel_genre,
-                              @Field("novel_synopsis") String novel_synopsis,
-                              @Field("novel_story") String novel_story);
-
     @Multipart
     @POST("addNovel")
     Call<RespAddNovel>NewNovels(@Part("novel_title") RequestBody novel_title,
@@ -44,9 +35,4 @@ public interface APIService {
                                 @Part("novel_synopsis") RequestBody novel_synopsis,
                                 @Part MultipartBody.Part novel_story,
                                 @Part MultipartBody.Part novel_cover);
-    @Multipart
-    @POST("addNovel")
-    Call<Addnovel>noveleee(@Part("novel_title")RequestBody novel_title,
-                           @Part MultipartBody.Part novel_cover);
-
 }
