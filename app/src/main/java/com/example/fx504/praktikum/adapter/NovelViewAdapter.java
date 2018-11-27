@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +16,13 @@ import android.widget.Toast;
 import com.example.fx504.praktikum.activities.InfoNovelActivity;
 import com.example.fx504.praktikum.model.Novel;
 import com.example.fx504.praktikum.R;
-import com.example.fx504.praktikum.model.ResShowNovel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NovelViewAdapter extends RecyclerView.Adapter<NovelViewAdapter.MyViewHolder> {
 
     private Context context;
     private List<Novel> novelList;
-
-    ArrayList<ResShowNovel> showNovels;
 
     public NovelViewAdapter(Context context, List<Novel> myNovel) {
         this.context = context;
@@ -40,7 +37,6 @@ public class NovelViewAdapter extends RecyclerView.Adapter<NovelViewAdapter.MyVi
         view = inflater.inflate(R.layout.cardview_novel, viewGroup ,false);
         final MyViewHolder myViewHolder = new MyViewHolder(view);
 
-        //onClick novel
         myViewHolder.cv_novel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
