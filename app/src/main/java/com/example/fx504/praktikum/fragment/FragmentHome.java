@@ -9,46 +9,70 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.example.fx504.praktikum.activities.GenreActivity;
 import com.example.fx504.praktikum.R;
+import com.example.fx504.praktikum.adapter.NewNovelAdapter;
 import com.example.fx504.praktikum.adapter.NovelViewAdapter;
+import com.example.fx504.praktikum.api.APIClient;
+import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.model.Novel;
+import com.example.fx504.praktikum.model.ResShowNovel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FragmentHome extends Fragment {
 
     ViewFlipper vf_novel;
-    List<Novel> myNovel;
+
+    private List<Novel> myNovel;
 
     Intent intent;
     ImageView iv_allUpdate;
     ImageView iv_genre;
 
+    View view;
+
+    APIService apiService;
+
+    NewNovelAdapter novelAdapter;
+    List<ResShowNovel> resShowNovels = new ArrayList<>();
+    RecyclerView rv_newNovel;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home,container,false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_home,container,false);
+
+       apiService=APIClient.getService();
+
 
         iv_allUpdate = view.findViewById(R.id.iv_allUpdate);
         iv_genre     = view.findViewById(R.id.iv_genre);
 
         //flipper Image
-        setflipperImage(view);
+        setflipperImage();
 
         // Favorite Novel
-        setFav(view);
+        setFav();
 
         // Update Novel
-        setNovelUpdate(view);
+//        setNovelUpdate();
+        callAPI();
 
         // Go to GenreActivity
         goGenreActivity();
@@ -56,8 +80,9 @@ public class FragmentHome extends Fragment {
         return view;
     }
 
-    public void setflipperImage(View v){
-        vf_novel   = v.findViewById(R.id.vf_novel);
+    //--------------------AD--------------------//
+    public void setflipperImage(){
+        vf_novel   = view.findViewById(R.id.vf_novel);
         int novel_cover[] = {R.drawable.cat_eye, R.drawable.dead_in_deep_water, R.drawable.strange_winds};
         for (int i =0; i<novel_cover.length;i++){
             animflipper(novel_cover[i]);
@@ -78,9 +103,10 @@ public class FragmentHome extends Fragment {
         vf_novel.setOutAnimation(getContext(), android.R.anim.slide_out_right);
     }
 
-    //-----------------------------------------------------------//
 
-    public void setFav(View v){
+    //--------------------SET FAV NOVEL--------------------//
+
+    public void setFav(){
         RecyclerView recyclerView;
         NovelViewAdapter novelAdapter;
 
@@ -92,7 +118,7 @@ public class FragmentHome extends Fragment {
             myNovel.add(new Novel("Aullido", "Horror", "Description this Novel"
                     ,R.drawable.n_aullido));
         }
-        recyclerView = v.findViewById(R.id.rc_fav);
+        recyclerView = view.findViewById(R.id.rc_fav);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         novelAdapter = new NovelViewAdapter(getContext(), myNovel);
@@ -100,28 +126,8 @@ public class FragmentHome extends Fragment {
         recyclerView.setAdapter(novelAdapter);
     }
 
-    //-----------------------------------------------------------//
 
-    public void setNovelUpdate(View v){
-        RecyclerView recyclerView;
-        NovelViewAdapter novelAdapter;
-
-        myNovel = new ArrayList<>();
-
-        for (int i =0; i<6; i++){
-            myNovel.add(new Novel("Search Love", "Romance", "About someone who always find another to fix hem",R.drawable.n_searchlove));
-            myNovel.add(new Novel("Aullido", "Horror", "Description this Novel",R.drawable.n_aullido));
-        }
-        recyclerView = v.findViewById(R.id.rc_novelRilis);
-
-
-        novelAdapter = new NovelViewAdapter(getContext(), myNovel);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),3);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(novelAdapter);
-    }
-
-    //-----------------------------------------------------------//
+    //--------------------BUTTON ACTION ICON--------------------//
 
     public void goGenreActivity(){
         iv_genre.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +137,57 @@ public class FragmentHome extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+
+    //--------------------NEW UPDATE NOVEL--------------------//
+
+    public void setNovelUpdate(){
+        RecyclerView recyclerView;
+        NovelViewAdapter novelAdapter;
+
+        myNovel = new ArrayList<>();
+
+        for (int i =0; i<6; i++){
+            myNovel.add(new Novel("Search Love", "Romance", "About someone who always find another to fix hem",R.drawable.n_searchlove));
+            myNovel.add(new Novel("Aullido", "Horror", "Description this Novel",R.drawable.n_aullido));
+        }
+        recyclerView = view.findViewById(R.id.rc_novelRilis);
+
+        novelAdapter = new NovelViewAdapter(getContext(), myNovel);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),3);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(novelAdapter);
+    }
+
+    public void callAPI(){
+        apiService.getNovelList()
+                .enqueue(new Callback<List<ResShowNovel>>() {
+                    @Override
+                    public void onResponse(Call<List<ResShowNovel>> call, Response<List<ResShowNovel>> response) {
+                        if (response.isSuccessful()){
+                            Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
+                            resShowNovels.addAll(response.body());
+                            setAdapter();
+                        }else {
+                            Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<ResShowNovel>> call, Throwable t) {
+                        Toast.makeText(getContext(), "API ERROR", Toast.LENGTH_SHORT).show();
+                        Log.wtf("errorGetNovel",t.getMessage());
+                    }
+                });
+    }
+
+    public void setAdapter(){
+        novelAdapter = new NewNovelAdapter(getContext(),resShowNovels);
+        rv_newNovel = view.findViewById(R.id.rc_novelRilis);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),3);
+        rv_newNovel.setLayoutManager(layoutManager);
+        rv_newNovel.setAdapter(novelAdapter);
     }
 
 }

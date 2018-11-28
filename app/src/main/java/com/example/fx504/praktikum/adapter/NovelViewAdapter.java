@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.fx504.praktikum.activities.InfoNovelActivity;
 import com.example.fx504.praktikum.model.Novel;
 import com.example.fx504.praktikum.R;
+import com.example.fx504.praktikum.model.ResShowNovel;
 
 import java.util.List;
 
@@ -24,9 +25,9 @@ public class NovelViewAdapter extends RecyclerView.Adapter<NovelViewAdapter.MyVi
     private Context context;
     private List<Novel> novelList;
 
-    public NovelViewAdapter(Context context, List<Novel> myNovel) {
+    public NovelViewAdapter(Context context, List<Novel> novelList) {
         this.context = context;
-        this.novelList = myNovel;
+        this.novelList = novelList;
     }
 
     @NonNull

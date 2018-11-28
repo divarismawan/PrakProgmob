@@ -1,14 +1,18 @@
 package com.example.fx504.praktikum.api;
 
+import com.example.fx504.praktikum.model.ResShowNovel;
 import com.example.fx504.praktikum.model.RespAddNovel;
 import com.example.fx504.praktikum.model.ResponseApi;
 import com.example.fx504.praktikum.model.ResponseLogin;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -35,4 +39,7 @@ public interface APIService {
                                 @Part("novel_synopsis") RequestBody novel_synopsis,
                                 @Part MultipartBody.Part novel_story,
                                 @Part MultipartBody.Part novel_cover);
+
+    @POST("selectNovel")
+    Call<List<ResShowNovel>>getNovelList();
 }
