@@ -17,33 +17,6 @@
             android:background="@color/colorView"
             android:src="@color/colorView"
             android:scaleType="fitXY"/>
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="#99ffffff"-->
-            <!--android:layout_alignEnd="@+id/iv_novel_img"-->
-            <!--android:layout_alignBottom="@+id/iv_novel_img"-->
-            <!--android:orientation="vertical">-->
-            <!--<TextView-->
-                <!--android:id="@+id/tv_novel_title"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Title Novel"-->
-                <!--android:layout_marginStart="5dp"-->
-                <!--android:layout_marginEnd="5dp"-->
-                <!--android:layout_marginTop="3dp"-->
-                <!--android:textSize="12sp"/>-->
-            <!--<TextView-->
-                <!--android:id="@+id/tv_novel_genre"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textSize="10sp"-->
-                <!--android:layout_marginStart="5dp"-->
-                <!--android:layout_marginEnd="5dp"-->
-                <!--android:layout_marginBottom="3dp"-->
-                <!--android:text="Genre"/>-->
-
-        <!--</LinearLayout>-->
         <TextView
             android:id="@+id/tv_novel_title"
             android:layout_width="match_parent"

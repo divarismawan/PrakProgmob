@@ -16,7 +16,7 @@
             android:layout_height="155dp"
             android:scaleType="fitXY"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_insert_photo"
+            android:src="@drawable/ic_default_img"
             />
 
         <LinearLayout

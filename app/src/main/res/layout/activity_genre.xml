@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.GenreActivity"
     android:orientation="vertical">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/walpp"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rc_genre"
         android:layout_width="match_parent"

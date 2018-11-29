@@ -6,8 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.model.ResShowNovel;
 
@@ -40,6 +42,10 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
         viewHolder.tv_novelTitle.setText(resShowNovel.getNovelTitle());
         viewHolder.tv_novelGenre.setText(resShowNovel.getNovelGenre());
 
+        //image
+        Glide.with(context).load(resShowNovel.getNovelCover())
+                .into(viewHolder.iv_novelCover);
+
     }
 
     @Override
@@ -51,11 +57,13 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
         int id_novel;
         TextView tv_novelTitle;
         TextView tv_novelGenre;
+        ImageView iv_novelCover;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_novelTitle = itemView.findViewById(R.id.tv_novel_title);
             tv_novelGenre = itemView.findViewById(R.id.tv_novel_genre);
+            iv_novelCover = itemView.findViewById(R.id.iv_novel_img);
         }
     }
 }
