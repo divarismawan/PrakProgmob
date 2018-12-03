@@ -33,17 +33,16 @@ public class LoginActivity extends AppCompatActivity {
 
     TextView tv_signUp;
 
-    Intent intent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-         sharePref = new SharePref(this);
 
-
+        sharePref = new SharePref(this);
         apiService = APIClient.getService();
+
+        // Find ID
 
         et_username  = findViewById(R.id.et_username);
         et_password  = findViewById(R.id.et_password);
@@ -51,24 +50,28 @@ public class LoginActivity extends AppCompatActivity {
         btn_login    = findViewById(R.id.btn_login);
         tv_signUp    = findViewById(R.id.tv_signUp);
 
+//----------------------------USE FUNCTION----------------------------//
+        //Login
         setBtn_login();
+
+        //Sign Up
         setTv_signUp();
 
     }
 
+//----------------------------LOGIN FUNCTION----------------------------//
     public void setBtn_login() {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 callAPI();
-
             }
         });
     }
 
-
+    //Get data from API Service
     private void callAPI(){
+        //get data input
         String user = et_username.getText().toString();
         String pass = et_password.getText().toString();
         apiService.LoginUser(user,pass).enqueue(new Callback<ResponseLogin>() {
@@ -76,19 +79,20 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
                 if (response.isSuccessful()){
+
+                    //save data user and show in Fragment Profile
                     sharePref.setDataString(SharePref.KEY_TOKEN,""+response.body().getToken());
                     sharePref.setDataString(SharePref.KEY_NAME,""+response.body().getUserName());
                     sharePref.setDataString(SharePref.KEY_PHONE,""+response.body().getUserTlfn());
                     sharePref.setDataString(SharePref.KEY_EMAIL,""+response.body().getUserEmail());
 
+                    //status admin or member
                     int status = sharePref.setDataInt(SharePref.KEY_STATUS,response.body().getStatus());
                     Toast.makeText(LoginActivity.this,
                             sharePref.getDataString(SharePref.KEY_NAME), Toast.LENGTH_SHORT).show();
                     setIntentStatus(status);
                 }else {
                     Toast.makeText(LoginActivity.this, "Input Salah", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(LoginActivity.this,
-                            sharePref.getDataString(SharePref.KEY_PHONE), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -100,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //Intent by type user
     public void setIntentStatus(int status){
         Intent intent;
         if (status==1){
@@ -113,18 +118,22 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+//----------------------------REGISTRATION FUNCTION----------------------------//
     public void setTv_signUp(){
         tv_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Go to Activity Register
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
     }
 
+//----------------------------FUNCTION Button On Back Pressed----------------------------//
     @Override
     public void onBackPressed() {
+        //Popup Dialog
         new AlertDialog.Builder(this)
                 .setTitle("Really Exit?")
                 .setMessage("Are you sure you want to exit?")

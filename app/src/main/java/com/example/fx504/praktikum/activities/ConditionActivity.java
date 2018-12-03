@@ -30,13 +30,11 @@ public class ConditionActivity extends Activity {
 
         sharePref = new SharePref(this);
 
-
-
         spashscreen();
 
     }
 
-    public void setIv_logo() {
+    public void setView_logo() {
         iv_logo = findViewById(R.id.iv_logo);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.myanim);
         iv_logo.startAnimation(animation);
@@ -64,8 +62,6 @@ public class ConditionActivity extends Activity {
                         intent = new Intent(ConditionActivity.this, MainActivity.class);
                     }
                     startActivity(intent);
-
-
                 }
                 ///jeda selesai flashscreen
                 this.finish();

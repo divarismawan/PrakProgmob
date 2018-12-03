@@ -3,6 +3,7 @@ package com.example.fx504.praktikum.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.model.ResShowNovel;
+import com.example.fx504.praktikum.utils.Util;
 
 import java.util.List;
 
@@ -33,7 +35,6 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
         return new ViewHolder(view);
     }
 
-
     //input data to view
     @Override
     public void onBindViewHolder(@NonNull NewNovelAdapter.ViewHolder viewHolder, int i) {
@@ -43,9 +44,10 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
         viewHolder.tv_novelGenre.setText(resShowNovel.getNovelGenre());
 
         //image
-        Glide.with(context).load(resShowNovel.getNovelCover())
+        Glide.with(context)
+                .load("http://192.168.43.43:8000/StoryNovels/" + resShowNovel.getNovelCover())
                 .into(viewHolder.iv_novelCover);
-
+        Log.wtf("getNovelCober",resShowNovel.getNovelCover());
     }
 
     @Override

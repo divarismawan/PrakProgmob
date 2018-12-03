@@ -56,6 +56,7 @@ public class FragmentHome extends Fragment {
         view = inflater.inflate(R.layout.fragment_home,container,false);
         apiService=APIClient.getService();
 
+//------------------ FIND ID ------------------//
         iv_allUpdate = view.findViewById(R.id.iv_allUpdate);
         iv_genre     = view.findViewById(R.id.iv_genre);
 
@@ -81,8 +82,8 @@ public class FragmentHome extends Fragment {
     public void setflipperImage(){
         vf_novel   = view.findViewById(R.id.vf_novel);
         int novel_cover[] = {R.drawable.cat_eye, R.drawable.dead_in_deep_water, R.drawable.strange_winds};
-        for (int i =0; i<novel_cover.length;i++){
-            animflipper(novel_cover[i]);
+        for (int aNovel_cover : novel_cover) {
+            animflipper(aNovel_cover);
         }
     }
 
@@ -102,12 +103,11 @@ public class FragmentHome extends Fragment {
 
 
     //--------------------SET FAV NOVEL--------------------//
-
     public void setFav(){
         apiService.getNovelList()
                 .enqueue(new Callback<List<ResShowNovel>>() {
                     @Override
-                    public void onResponse(Call<List<ResShowNovel>> call, Response<List<ResShowNovel>> response) {
+                    public void onResponse(@NonNull Call<List<ResShowNovel>> call, @NonNull Response<List<ResShowNovel>> response) {
                         if (response.isSuccessful()){
                             Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
                             resShowNovels.addAll(response.body());
@@ -118,8 +118,8 @@ public class FragmentHome extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<List<ResShowNovel>> call, Throwable t) {
-                        Toast.makeText(getContext(), "API ERROR", Toast.LENGTH_SHORT).show();
+                    public void onFailure(@NonNull Call<List<ResShowNovel>> call, @NonNull Throwable t) {
+                        Toast.makeText(getContext(), "Please Connect with Internet", Toast.LENGTH_SHORT).show();
                         Log.wtf("errorGetNovel",t.getMessage());
                     }
                 });
@@ -145,16 +145,18 @@ public class FragmentHome extends Fragment {
         });
     }
 
-
     //--------------------NEW UPDATE NOVEL--------------------//
 
     public void newNovelView(){
         apiService.getNovelList()
                 .enqueue(new Callback<List<ResShowNovel>>() {
                     @Override
-                    public void onResponse(Call<List<ResShowNovel>> call, Response<List<ResShowNovel>> response) {
+                    public void onResponse(@NonNull Call<List<ResShowNovel>> call,
+                                           @NonNull Response<List<ResShowNovel>> response) {
                         if (response.isSuccessful()){
                             Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
+                            //get all data Novel from API SERVICE
+                            assert response.body() != null;
                             resShowNovels.addAll(response.body());
                             setAdapterNewNovel();
                         }else {
@@ -163,7 +165,7 @@ public class FragmentHome extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<List<ResShowNovel>> call, Throwable t) {
+                    public void onFailure(@NonNull Call<List<ResShowNovel>> call, @NonNull Throwable t) {
                         Toast.makeText(getContext(), "API ERROR", Toast.LENGTH_SHORT).show();
                         Log.wtf("errorGetNovel",t.getMessage());
                         }
