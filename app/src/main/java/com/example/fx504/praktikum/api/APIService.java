@@ -1,5 +1,6 @@
 package com.example.fx504.praktikum.api;
 
+import com.example.fx504.praktikum.model.ResGetById;
 import com.example.fx504.praktikum.model.ResShowNovel;
 import com.example.fx504.praktikum.model.RespAddNovel;
 import com.example.fx504.praktikum.model.ResponseApi;
@@ -14,8 +15,10 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 public interface APIService {
 
@@ -42,4 +45,7 @@ public interface APIService {
 
     @POST("selectNovel")
     Call<List<ResShowNovel>>getNovelList();
+
+    @GET("selectById/{id}")
+    Call<ResGetById>NovelGetById(@Path("id")int id);
 }

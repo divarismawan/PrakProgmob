@@ -12,6 +12,7 @@ public class SharePref{
     public final static String KEY_PHONE  = "user_phone";
     public final static String KEY_TOKEN  = "user_token";
     public final static String KEY_STATUS = "user_status";
+    public final static String KEY_ID     = "novel_id";
 
 
     private SharedPreferences sharedPreferences;

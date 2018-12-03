@@ -1,6 +1,7 @@
 package com.example.fx504.praktikum.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -54,13 +55,15 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
 
         //image
         Glide.with(context)
-                .load("http://192.168.43.43:8000/StoryNovels/" + resShowNovel.getNovelCover())
+                .load("http://192.168.43.43:8000/StoryNovels/"+resShowNovel.getNovelCover())
                 .into(viewHolder.iv_novelCover);
         Log.wtf("getNovelCober",resShowNovel.getNovelCover());
 
+        //Intent and get id novel
         viewHolder.iv_novelCover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+resShowNovel.getNovelTitle(), Toast.LENGTH_SHORT).show();
             }
         });
