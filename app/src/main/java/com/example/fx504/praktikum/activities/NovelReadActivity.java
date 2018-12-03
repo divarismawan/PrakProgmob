@@ -26,6 +26,7 @@ import retrofit2.http.Url;
 
 public class NovelReadActivity extends AppCompatActivity {
 
+    Intent intent;
     PDFView pdfView;
     TextView textView;
 
@@ -37,46 +38,14 @@ public class NovelReadActivity extends AppCompatActivity {
         pdfView = findViewById(R.id.pdf_View);
         textView = findViewById(R.id.textView);
 
-//        Intent intent = getIntent();
-//
-//        int data = intent.getIntExtra("Nilai",0);
-//        textView.setText(""+data);
 
-
-//        Uri pdfFile = Uri.parse(getIntent().getStringExtra("pdfUri"));
-//        Toast.makeText(this, "Sukses", Toast.LENGTH_SHORT).show();
-//        pdfView.fromUri(pdfFile).load();
-
-//
-//        String image = getIntent().getExtras().getString("pdfUri");
-//        if(image!= null) {
-//            Uri imageUri=Uri.parse(image);
-//            pdfView.fromUri(imageUri).load();
-//        }
-//
-
-
-
-        pdfView.fromAsset("ijis03b.pdf").load();
-
-//        setPdfView();
-        Toast.makeText(this, "Hello world", Toast.LENGTH_SHORT).show();
-//        new RetrivePDF().execute("http://ancestralauthor.com/download/sample.pdf");
+        setPdfView();
     }
 
 
    public void setPdfView(){
-        if (getIntent() != null){
-            String viewType = getIntent().getStringExtra("ViewType");
-            if (viewType != null || !TextUtils.isEmpty(null)){
-//                Uri novel = (Uri) Objects.requireNonNull(getIntent().getExtras()).get("pdfUri");
-                Uri pdfFile = Uri.parse(getIntent().getStringExtra("pdfUri"));
-                Toast.makeText(this, "Sukses", Toast.LENGTH_SHORT).show();
-                pdfView.fromUri(pdfFile).load();
-            }
-        }else {
-            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
-        }
+        int id = getIntent().getIntExtra("id_novel",0);
+
    }
 
 

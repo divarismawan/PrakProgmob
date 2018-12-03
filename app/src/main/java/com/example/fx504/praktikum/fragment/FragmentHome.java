@@ -157,6 +157,7 @@ public class FragmentHome extends Fragment {
                             Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
                             //get all data Novel from API SERVICE
                             assert response.body() != null;
+                            resShowNovels.clear();
                             resShowNovels.addAll(response.body());
                             setAdapterNewNovel();
                         }else {

@@ -6,11 +6,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APIClient {
     public static APIService getService(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.43.43:8000/api/")
+                .baseUrl(APIUrl.BASE_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         return retrofit.create(APIService.class);
-
     }
 }

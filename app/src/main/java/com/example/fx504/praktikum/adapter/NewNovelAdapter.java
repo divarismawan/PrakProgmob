@@ -14,11 +14,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
+import com.example.fx504.praktikum.activities.InfoNovelActivity;
+import com.example.fx504.praktikum.api.APIUrl;
 import com.example.fx504.praktikum.model.ResShowNovel;
 
 import java.util.List;
 
-import javax.sql.DataSource;
 
 public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHolder> {
 
@@ -53,9 +54,11 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
         viewHolder.tv_novelTitle.setText(resShowNovel.getNovelTitle());
         viewHolder.tv_novelGenre.setText(resShowNovel.getNovelGenre());
 
+        String url_file = url();
+
         //image
         Glide.with(context)
-                .load("http://192.168.43.43:8000/StoryNovels/"+resShowNovel.getNovelCover())
+                .load(url_file+resShowNovel.getNovelCover())
                 .into(viewHolder.iv_novelCover);
         Log.wtf("getNovelCober",resShowNovel.getNovelCover());
 
@@ -63,11 +66,18 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
         viewHolder.iv_novelCover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(viewHolder.itemView.getContext(), InfoNovelActivity.class);
+                intent.putExtra("id_novel",viewHolder.id_novel);
                 Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+resShowNovel.getNovelTitle(), Toast.LENGTH_SHORT).show();
+
+                viewHolder.itemView.getContext().startActivity(intent);
             }
         });
 
+    }
+
+    private String url(){
+        return APIUrl.BASE_DATA_URL;
     }
 
     @Override
@@ -87,5 +97,6 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
             tv_novelGenre = itemView.findViewById(R.id.tv_novel_genre);
             iv_novelCover = itemView.findViewById(R.id.iv_novel_img);
         }
+
     }
 }
