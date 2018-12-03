@@ -72,6 +72,7 @@ public class InfoNovelActivity extends AppCompatActivity {
             public void onClick(View v) {
                 intent = new Intent(InfoNovelActivity.this, NovelReadActivity.class);
                 intent.putExtra("id_novel",id_novel);
+                intent.putExtra("story_novel",url_stroy);
                 startActivity(intent);
             }
         });
@@ -96,6 +97,9 @@ public class InfoNovelActivity extends AppCompatActivity {
                             Glide.with(InfoNovelActivity.this)
                                     .load(APIUrl.BASE_DATA_URL +response.body().getNovelCover())
                                     .into(iv_NovelCover);
+                            url_stroy = Glide.with(InfoNovelActivity.this)
+                                    .load(APIUrl.BASE_DATA_URL +response.body().getNovelStory())
+                                    .toString();
                         }
 
                     }

@@ -1,5 +1,6 @@
 package com.example.fx504.praktikum.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.net.Uri;
@@ -7,11 +8,17 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.admin.AddNovel;
+import com.example.fx504.praktikum.api.APIClient;
+import com.example.fx504.praktikum.api.APIService;
+import com.example.fx504.praktikum.api.APIUrl;
+import com.example.fx504.praktikum.model.ResGetById;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnDrawListener;
 
@@ -22,11 +29,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.http.Url;
 
 public class NovelReadActivity extends AppCompatActivity {
 
-    Intent intent;
+    APIService apiService;
+
+    byte[] mypdf;
+
     PDFView pdfView;
     TextView textView;
 
@@ -35,16 +48,38 @@ public class NovelReadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novelread);
 
+        apiService = APIClient.getService();
+
         pdfView = findViewById(R.id.pdf_View);
         textView = findViewById(R.id.textView);
 
+        String uri = getIntent().getStringExtra("story_novel");
+        Toast.makeText(this, uri, Toast.LENGTH_SHORT).show();
+        Log.wtf("grideee",uri);
 
-        setPdfView();
+        pdfView.fromAsset("ijis03b.pdf").load();
+
+
     }
 
 
    public void setPdfView(){
         int id = getIntent().getIntExtra("id_novel",0);
+        apiService.NovelGetById(id)
+                .enqueue(new Callback<ResGetById>() {
+                    @SuppressLint("CheckResult")
+                    @Override
+                    public void onResponse(Call<ResGetById> call, Response<ResGetById> response) {
+                        if (response.isSuccessful()){
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResGetById> call, Throwable t) {
+
+                    }
+                });
 
    }
 
