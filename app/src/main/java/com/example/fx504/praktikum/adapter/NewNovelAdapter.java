@@ -9,13 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.model.ResShowNovel;
-import com.example.fx504.praktikum.utils.Util;
 
 import java.util.List;
+
+import javax.sql.DataSource;
 
 public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHolder> {
 
@@ -30,15 +32,22 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
     //set view
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.cardview_novel,viewGroup,false);
+
+       view.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+           }
+       });
+
         return new ViewHolder(view);
     }
 
     //input data to view
     @Override
-    public void onBindViewHolder(@NonNull NewNovelAdapter.ViewHolder viewHolder, int i) {
-        ResShowNovel resShowNovel = showNovels.get(i);
+    public void onBindViewHolder(@NonNull final NewNovelAdapter.ViewHolder viewHolder, int i) {
+        final ResShowNovel resShowNovel = showNovels.get(i);
         viewHolder.id_novel = resShowNovel.getId();
         viewHolder.tv_novelTitle.setText(resShowNovel.getNovelTitle());
         viewHolder.tv_novelGenre.setText(resShowNovel.getNovelGenre());
@@ -48,6 +57,14 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
                 .load("http://192.168.43.43:8000/StoryNovels/" + resShowNovel.getNovelCover())
                 .into(viewHolder.iv_novelCover);
         Log.wtf("getNovelCober",resShowNovel.getNovelCover());
+
+        viewHolder.iv_novelCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+resShowNovel.getNovelTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
