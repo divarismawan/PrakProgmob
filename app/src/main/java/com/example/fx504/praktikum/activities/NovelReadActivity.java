@@ -38,10 +38,10 @@ public class NovelReadActivity extends AppCompatActivity {
 
     APIService apiService;
 
-    byte[] mypdf;
-
     PDFView pdfView;
     TextView textView;
+
+    Url url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +58,6 @@ public class NovelReadActivity extends AppCompatActivity {
         Log.wtf("grideee",uri);
 
         pdfView.fromAsset("ijis03b.pdf").load();
-
-
     }
 
 
@@ -71,7 +69,8 @@ public class NovelReadActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ResGetById> call, Response<ResGetById> response) {
                         if (response.isSuccessful()){
-
+//                            url = APIUrl.BASE_DATA_URL + response.body().getNovelStory();
+//                            pdfView.fromBytes(url).load();
                         }
                     }
 

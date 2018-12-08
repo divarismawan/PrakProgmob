@@ -16,45 +16,42 @@ import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.activities.NovelInfoActivity;
 import com.example.fx504.praktikum.api.APIUrl;
-import com.example.fx504.praktikum.model.ResShowNovel;
+import com.example.fx504.praktikum.model.RespFavorite;
 
 import java.util.List;
 
-
-public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHolder> {
+public class FavNovelAdapter extends RecyclerView.Adapter<FavNovelAdapter.ViewHolder> {
 
     private Context context;
-    private List<ResShowNovel> showNovels;
+    private List<RespFavorite> favNovel;
 
-    public NewNovelAdapter(Context context, List<ResShowNovel> showNovels) {
+    public FavNovelAdapter(Context context, List<RespFavorite> favNovel){
         this.context = context;
-        this.showNovels = showNovels;
+        this.favNovel = favNovel;
     }
 
-    //set view
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.cardview_novel,viewGroup,false);
 
         return new ViewHolder(view);
     }
 
-    //input data to view
     @Override
-    public void onBindViewHolder(@NonNull final NewNovelAdapter.ViewHolder viewHolder, int i) {
-        final ResShowNovel resShowNovel = showNovels.get(i);
-        viewHolder.id_novel = resShowNovel.getId();
-        viewHolder.tv_novelTitle.setText(resShowNovel.getNovelTitle());
-        viewHolder.tv_novelGenre.setText(resShowNovel.getNovelGenre());
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
+        final RespFavorite respFavorite = favNovel.get(i);
+        viewHolder.id_novel = respFavorite.getId();
+        viewHolder.tv_novelTitle.setText(respFavorite.getNovelTitle());
+        viewHolder.tv_novelGenre.setText(respFavorite.getNovelGenre());
 
         String url_file = url();
 
         //image
         Glide.with(context)
-                .load(url_file+resShowNovel.getNovelCover())
+                .load(url_file+respFavorite.getNovelCover())
                 .into(viewHolder.iv_novelCover);
-        Log.wtf("getNovelCober",resShowNovel.getNovelCover());
+        Log.wtf("getNovelCober",respFavorite.getNovelCover());
 
         //Intent and get id novel
         viewHolder.iv_novelCover.setOnClickListener(new View.OnClickListener() {
@@ -62,21 +59,20 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
             public void onClick(View v) {
                 Intent intent = new Intent(viewHolder.itemView.getContext(), NovelInfoActivity.class);
                 intent.putExtra("id_novel",viewHolder.id_novel);
-                Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+resShowNovel.getNovelTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+respFavorite.getNovelTitle(), Toast.LENGTH_SHORT).show();
 
                 viewHolder.itemView.getContext().startActivity(intent);
             }
         });
-
-    }
-
-    private String url(){
-        return APIUrl.BASE_DATA_URL;
     }
 
     @Override
     public int getItemCount() {
-        return showNovels.size();
+        return favNovel.size();
+    }
+
+    private String url(){
+        return APIUrl.BASE_DATA_URL;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -93,4 +89,5 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
         }
 
     }
+
 }

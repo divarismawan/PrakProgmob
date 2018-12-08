@@ -3,6 +3,7 @@ package com.example.fx504.praktikum.api;
 import com.example.fx504.praktikum.model.ResGetById;
 import com.example.fx504.praktikum.model.ResShowNovel;
 import com.example.fx504.praktikum.model.RespAddNovel;
+import com.example.fx504.praktikum.model.RespFavorite;
 import com.example.fx504.praktikum.model.ResponseApi;
 import com.example.fx504.praktikum.model.ResponseLogin;
 
@@ -48,4 +49,7 @@ public interface APIService {
 
     @GET("selectById/{id}")
     Call<ResGetById>NovelGetById(@Path("id")int id);
+
+    @GET("favNovel")
+    Call<List<RespFavorite>>getFavNovel();
 }

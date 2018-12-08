@@ -16,16 +16,11 @@ import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.api.APIUrl;
 import com.example.fx504.praktikum.model.ResGetById;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.Inflater;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Url;
 
-public class InfoNovelActivity extends AppCompatActivity {
+public class NovelInfoActivity extends AppCompatActivity {
 
     Intent intent;
 
@@ -62,7 +57,7 @@ public class InfoNovelActivity extends AppCompatActivity {
         btn_setFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent = new Intent(InfoNovelActivity.this, AddNovel.class);
+                intent = new Intent(NovelInfoActivity.this, AddNovel.class);
                 startActivity(intent);
             }
         });
@@ -70,7 +65,7 @@ public class InfoNovelActivity extends AppCompatActivity {
         tv_readNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent = new Intent(InfoNovelActivity.this, NovelReadActivity.class);
+                intent = new Intent(NovelInfoActivity.this, NovelReadActivity.class);
                 intent.putExtra("id_novel",id_novel);
                 intent.putExtra("story_novel",url_stroy);
                 startActivity(intent);
@@ -94,10 +89,10 @@ public class InfoNovelActivity extends AppCompatActivity {
                             tv_NovelRelease.setText(response.body().getCreatedAt());
                             tv_NovelDecs.setText(response.body().getNovelSynopsis());
 
-                            Glide.with(InfoNovelActivity.this)
+                            Glide.with(NovelInfoActivity.this)
                                     .load(APIUrl.BASE_DATA_URL +response.body().getNovelCover())
                                     .into(iv_NovelCover);
-                            url_stroy = Glide.with(InfoNovelActivity.this)
+                            url_stroy = Glide.with(NovelInfoActivity.this)
                                     .load(APIUrl.BASE_DATA_URL +response.body().getNovelStory())
                                     .toString();
                         }

@@ -47,7 +47,6 @@ public class FragmentProfile extends Fragment {
 
     SharePref sharePref;
 
-    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

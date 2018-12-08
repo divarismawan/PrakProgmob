@@ -19,10 +19,12 @@ import android.widget.ViewFlipper;
 
 import com.example.fx504.praktikum.activities.GenreActivity;
 import com.example.fx504.praktikum.R;
+import com.example.fx504.praktikum.adapter.FavNovelAdapter;
 import com.example.fx504.praktikum.adapter.NewNovelAdapter;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.model.ResShowNovel;
+import com.example.fx504.praktikum.model.RespFavorite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +43,11 @@ public class FragmentHome extends Fragment {
 
     APIService apiService;
 
-    NewNovelAdapter novelAdapter;
+    NewNovelAdapter newNovelAdapter;
     List<ResShowNovel> resShowNovels = new ArrayList<>();
+
+    FavNovelAdapter favNovelAdapter;
+    List<RespFavorite> respFavorites = new ArrayList<>();
 
     RecyclerView rv_favNovel;
     RecyclerView rv_newNovel;
@@ -104,13 +109,16 @@ public class FragmentHome extends Fragment {
 
     //--------------------SET FAV NOVEL--------------------//
     public void setFav(){
-        apiService.getNovelList()
-                .enqueue(new Callback<List<ResShowNovel>>() {
+        apiService.getFavNovel()
+                .enqueue(new Callback<List<RespFavorite>>() {
                     @Override
-                    public void onResponse(@NonNull Call<List<ResShowNovel>> call, @NonNull Response<List<ResShowNovel>> response) {
+                    public void onResponse(Call<List<RespFavorite>> call, Response<List<RespFavorite>> response) {
                         if (response.isSuccessful()){
                             Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
-                            resShowNovels.addAll(response.body());
+                            //get all data Novel from API SERVICE
+                            assert response.body() != null;
+                            respFavorites.clear();
+                            respFavorites.addAll(response.body());
                             setAdapterFavNovel();
                         }else {
                             Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
@@ -118,19 +126,18 @@ public class FragmentHome extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<List<ResShowNovel>> call, @NonNull Throwable t) {
-                        Toast.makeText(getContext(), "Please Connect with Internet", Toast.LENGTH_SHORT).show();
-                        Log.wtf("errorGetNovel",t.getMessage());
+                    public void onFailure(Call<List<RespFavorite>> call, Throwable t) {
+
                     }
                 });
     }
 
     public void setAdapterFavNovel(){
-        novelAdapter = new NewNovelAdapter(getContext(),resShowNovels);
+        favNovelAdapter = new FavNovelAdapter(getContext(),respFavorites);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false);
         rv_favNovel.setLayoutManager(layoutManager);
-        rv_favNovel.setAdapter(novelAdapter);
+        rv_favNovel.setAdapter(favNovelAdapter);
     }
 
     //--------------------BUTTON ACTION ICON--------------------//
@@ -174,10 +181,10 @@ public class FragmentHome extends Fragment {
     }
 
     public void setAdapterNewNovel(){
-        novelAdapter = new NewNovelAdapter(getContext(),resShowNovels);
+        newNovelAdapter = new NewNovelAdapter(getContext(),resShowNovels);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(),3);
         rv_newNovel.setLayoutManager(layoutManager);
-        rv_newNovel.setAdapter(novelAdapter);
+        rv_newNovel.setAdapter(newNovelAdapter);
     }
 
 }
