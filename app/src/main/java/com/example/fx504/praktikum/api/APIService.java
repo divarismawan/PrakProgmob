@@ -2,6 +2,7 @@ package com.example.fx504.praktikum.api;
 
 import com.example.fx504.praktikum.model.ResGetById;
 import com.example.fx504.praktikum.model.ResShowNovel;
+import com.example.fx504.praktikum.model.RespAddFavorite;
 import com.example.fx504.praktikum.model.RespAddNovel;
 import com.example.fx504.praktikum.model.RespFavorite;
 import com.example.fx504.praktikum.model.ResponseApi;
@@ -52,4 +53,9 @@ public interface APIService {
 
     @GET("favNovel")
     Call<List<RespFavorite>>getFavNovel();
+
+    @POST("addFavorite")
+    Call<RespAddFavorite>AddFavorite(@Field("id_novel") String id_novel,
+                                     @Field("id_member")String id_member);
+
 }

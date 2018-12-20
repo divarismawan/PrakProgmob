@@ -1,6 +1,9 @@
 package com.example.fx504.praktikum.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +19,12 @@ import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.api.APIUrl;
 import com.example.fx504.praktikum.model.ResGetById;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,7 +35,6 @@ public class NovelInfoActivity extends AppCompatActivity {
 
     APIService apiService;
 
-    String url_stroy;
 
     ImageView iv_NovelCover;
     TextView tv_NovelTitle, tv_NovelGenre, tv_NovelRelease,tv_NovelDecs;
@@ -34,6 +42,7 @@ public class NovelInfoActivity extends AppCompatActivity {
     Button btn_setFav;
 
     int id_novel;
+    int status_fav=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,20 +63,14 @@ public class NovelInfoActivity extends AppCompatActivity {
 
         btn_setFav      = findViewById(R.id.btn_setFav);
 
-        btn_setFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent = new Intent(NovelInfoActivity.this, AddNovel.class);
-                startActivity(intent);
-            }
-        });
+
+        setButtonFav();
 
         tv_readNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(NovelInfoActivity.this, NovelReadActivity.class);
                 intent.putExtra("id_novel",id_novel);
-                intent.putExtra("story_novel",url_stroy);
                 startActivity(intent);
             }
         });
@@ -76,25 +79,39 @@ public class NovelInfoActivity extends AppCompatActivity {
 
     }
 
+    public void setButtonFav(){
+        btn_setFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                status_fav *=-1;
+                if (status_fav == -1){
+                    btn_setFav.setBackgroundResource(R.drawable.bg_btn);
+                    btn_setFav.setText("Favorited");
+                    btn_setFav.setTextColor(Color.WHITE);
+                }else if (status_fav == 1){
+                    btn_setFav.setBackgroundResource(R.drawable.bg_btn2);
+                    btn_setFav.setText("Add to Favorite");
+                    btn_setFav.setTextColor(Color.BLACK);
+                }
+            }
+        });
+    }
+
     public void getAPINovel(){
         apiService.NovelGetById(id_novel)
                 .enqueue(new Callback<ResGetById>() {
 
                     @Override
-                    public void onResponse(Call<ResGetById> call, Response<ResGetById> response) {
+                    public void onResponse(@NonNull Call<ResGetById> call, @NonNull Response<ResGetById> response) {
                         if (response.isSuccessful()){
 
                             tv_NovelTitle.setText(response.body().getNovelTitle());
                             tv_NovelGenre.setText(response.body().getNovelGenre());
-                            tv_NovelRelease.setText(response.body().getCreatedAt());
                             tv_NovelDecs.setText(response.body().getNovelSynopsis());
 
                             Glide.with(NovelInfoActivity.this)
                                     .load(APIUrl.BASE_DATA_URL +response.body().getNovelCover())
                                     .into(iv_NovelCover);
-                            url_stroy = Glide.with(NovelInfoActivity.this)
-                                    .load(APIUrl.BASE_DATA_URL +response.body().getNovelStory())
-                                    .toString();
                         }
 
                     }
@@ -105,4 +122,6 @@ public class NovelInfoActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 }

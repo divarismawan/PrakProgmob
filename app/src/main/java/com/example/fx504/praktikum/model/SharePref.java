@@ -36,6 +36,9 @@ public class SharePref{
     }
 
     public void clearData(){
-        sharedPreferences.edit().clear().apply();
+        sharedPreferences
+                .edit()
+                .clear()
+                .apply();
     }
 }

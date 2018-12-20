@@ -58,10 +58,11 @@ public class ConditionActivity extends Activity {
                     int status = sharePref.getDataInt(SharePref.KEY_STATUS);
                     if (status==1){
                         intent = new Intent(ConditionActivity.this, HomeAdmin.class);
-                    }else {
+                        startActivity(intent);
+                    }else if (status==0){
                         intent = new Intent(ConditionActivity.this, MainActivity.class);
+                        startActivity(intent);
                     }
-                    startActivity(intent);
                 }
                 ///jeda selesai flashscreen
                 this.finish();

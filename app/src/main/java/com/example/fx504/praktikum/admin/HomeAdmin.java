@@ -28,6 +28,8 @@ public class HomeAdmin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_admin);
 
+        sharePref = new SharePref(this);
+
 
         setCv_addNovel();
         setCv_profileAdmin();
@@ -51,19 +53,47 @@ public class HomeAdmin extends AppCompatActivity {
         cv_profileAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(HomeAdmin.this)
-                        .setTitle("Really Exit?")
-                        .setMessage("Are you sure you want to exit?")
-                        .setNegativeButton(android.R.string.no, null)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                sharePref.clearData();
-                                Intent intent = new Intent(HomeAdmin.this, LoginActivity.class);
-                                startActivity(intent);
-                            }
-                        }).create().show();
+//                new AlertDialog.Builder(HomeAdmin.this)
+//                        .setTitle("Really Exit?")
+//                        .setMessage("Are you sure you want to exit?")
+//                        .setNegativeButton(android.R.string.no, null)
+//                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface arg0, int arg1) {
+//                                sharePref.clearData();
+//                                Intent intent = new Intent(HomeAdmin.this, LoginActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        }).create().show();
+                val_btnProfile();
 
             }
         });
+    }
+
+    public void val_btnProfile(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Write your message here.");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        sharePref.clearData();
+                        Intent intent = new Intent(HomeAdmin.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 }

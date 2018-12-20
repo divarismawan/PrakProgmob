@@ -85,9 +85,10 @@ public class LoginActivity extends AppCompatActivity {
                     sharePref.setDataString(SharePref.KEY_NAME,""+response.body().getUserName());
                     sharePref.setDataString(SharePref.KEY_PHONE,""+response.body().getUserTlfn());
                     sharePref.setDataString(SharePref.KEY_EMAIL,""+response.body().getUserEmail());
+                    sharePref.setDataInt(SharePref.KEY_STATUS,response.body().getStatus());
 
                     //status admin or member
-                    int status = sharePref.setDataInt(SharePref.KEY_STATUS,response.body().getStatus());
+                    int status = sharePref.getDataInt(SharePref.KEY_STATUS);
                     Toast.makeText(LoginActivity.this,
                             sharePref.getDataString(SharePref.KEY_NAME), Toast.LENGTH_SHORT).show();
                     setIntentStatus(status);

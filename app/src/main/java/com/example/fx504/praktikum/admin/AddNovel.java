@@ -351,8 +351,6 @@ public class AddNovel extends AppCompatActivity {
                 Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads"), Long.valueOf(id));
                 return getDataColumn(context, contentUri, null, null);
 
-
-
             }
             // MediaProvider
             else if (isMediaDocument(uri)) {

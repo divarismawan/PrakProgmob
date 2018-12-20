@@ -46,17 +46,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="20-10-2018"
+                android:text="00-00-0000"
                 android:gravity="center"/>
 
             <Button
                 android:id="@+id/btn_setFav"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add to Favorites"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
                 android:layout_marginTop="20dp"
-                android:textColor="#fff"
-                android:backgroundTint="@color/colorPrimary"
+                android:text="Add to Favorite"
+                android:textSize="10sp"
+                android:textAllCaps="false"
+                android:layout_marginHorizontal="25sp"
+                android:background="@drawable/bg_btn2"
                 android:layout_gravity="center"/>
         </LinearLayout>
     </LinearLayout>

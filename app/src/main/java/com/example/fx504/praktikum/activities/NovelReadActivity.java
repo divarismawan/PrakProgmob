@@ -41,7 +41,6 @@ public class NovelReadActivity extends AppCompatActivity {
     PDFView pdfView;
     TextView textView;
 
-    Url url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
