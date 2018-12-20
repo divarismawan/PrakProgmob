@@ -4,7 +4,8 @@ import com.example.fx504.praktikum.model.ResGetById;
 import com.example.fx504.praktikum.model.ResShowNovel;
 import com.example.fx504.praktikum.model.RespAddFavorite;
 import com.example.fx504.praktikum.model.RespAddNovel;
-import com.example.fx504.praktikum.model.RespFavorite;
+import com.example.fx504.praktikum.model.RespDeleteFav;
+import com.example.fx504.praktikum.model.RespFavMember;
 import com.example.fx504.praktikum.model.ResponseApi;
 import com.example.fx504.praktikum.model.ResponseLogin;
 
@@ -17,7 +18,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
-import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
@@ -52,10 +52,16 @@ public interface APIService {
     Call<ResGetById>NovelGetById(@Path("id")int id);
 
     @GET("favNovel")
-    Call<List<RespFavorite>>getFavNovel();
+    Call<List<RespFavMember>>getFavNovel();
 
+    @FormUrlEncoded
     @POST("addFavorite")
-    Call<RespAddFavorite>AddFavorite(@Field("id_novel") String id_novel,
-                                     @Field("id_member")String id_member);
+    Call<RespAddFavorite>AddFavorite(@Field("id_novel") int id_novel,
+                                     @Field("id_member") int id_member);
+
+    @FormUrlEncoded
+    @POST("deleteFavorite")
+    Call<RespDeleteFav>DeleteFav(@Field("id_novel") int id_novel,
+                                 @Field("id_member") int id_member);
 
 }

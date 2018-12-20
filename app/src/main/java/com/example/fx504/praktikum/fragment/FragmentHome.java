@@ -24,7 +24,7 @@ import com.example.fx504.praktikum.adapter.NewNovelAdapter;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.model.ResShowNovel;
-import com.example.fx504.praktikum.model.RespFavorite;
+import com.example.fx504.praktikum.model.RespFavMember;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ public class FragmentHome extends Fragment {
     List<ResShowNovel> resShowNovels = new ArrayList<>();
 
     FavNovelAdapter favNovelAdapter;
-    List<RespFavorite> respFavorites = new ArrayList<>();
+    List<RespFavMember> respFavMembers = new ArrayList<>();
 
     RecyclerView rv_favNovel;
     RecyclerView rv_newNovel;
@@ -110,15 +110,15 @@ public class FragmentHome extends Fragment {
     //--------------------SET FAV NOVEL--------------------//
     public void setFav(){
         apiService.getFavNovel()
-                .enqueue(new Callback<List<RespFavorite>>() {
+                .enqueue(new Callback<List<RespFavMember>>() {
                     @Override
-                    public void onResponse(Call<List<RespFavorite>> call, Response<List<RespFavorite>> response) {
+                    public void onResponse(Call<List<RespFavMember>> call, Response<List<RespFavMember>> response) {
                         if (response.isSuccessful()){
                             Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
                             //get all data Novel from API SERVICE
                             assert response.body() != null;
-                            respFavorites.clear();
-                            respFavorites.addAll(response.body());
+                            respFavMembers.clear();
+                            respFavMembers.addAll(response.body());
                             setAdapterFavNovel();
                         }else {
                             Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
@@ -126,14 +126,14 @@ public class FragmentHome extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<List<RespFavorite>> call, Throwable t) {
+                    public void onFailure(Call<List<RespFavMember>> call, Throwable t) {
 
                     }
                 });
     }
 
     public void setAdapterFavNovel(){
-        favNovelAdapter = new FavNovelAdapter(getContext(),respFavorites);
+        favNovelAdapter = new FavNovelAdapter(getContext(), respFavMembers);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false);
         rv_favNovel.setLayoutManager(layoutManager);

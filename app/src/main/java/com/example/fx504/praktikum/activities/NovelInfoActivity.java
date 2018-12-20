@@ -2,7 +2,6 @@ package com.example.fx504.praktikum.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,20 +9,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
-import com.example.fx504.praktikum.admin.AddNovel;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.api.APIUrl;
 import com.example.fx504.praktikum.model.ResGetById;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Objects;
+import com.example.fx504.praktikum.model.RespAddFavorite;
+import com.example.fx504.praktikum.model.RespDeleteFav;
+import com.example.fx504.praktikum.model.SharePref;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,7 +28,7 @@ import retrofit2.Response;
 public class NovelInfoActivity extends AppCompatActivity {
 
     Intent intent;
-
+    SharePref sharePref;
     APIService apiService;
 
 
@@ -42,6 +38,7 @@ public class NovelInfoActivity extends AppCompatActivity {
     Button btn_setFav;
 
     int id_novel;
+    int id_member;
     int status_fav=-1;
 
     @Override
@@ -49,9 +46,12 @@ public class NovelInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novelinfo);
 
+        sharePref = new SharePref(this);
+
         apiService = APIClient.getService();
 
-        id_novel = getIntent().getIntExtra("id_novel",0);
+        id_novel  = getIntent().getIntExtra("id_novel",0);
+        id_member = sharePref.getDataInt(SharePref.KEY_ID);
 
         iv_NovelCover   = findViewById(R.id.iv_novelCover);
         tv_NovelTitle   = findViewById(R.id.tv_novelTitlle);
@@ -84,11 +84,13 @@ public class NovelInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 status_fav *=-1;
-                if (status_fav == -1){
+                if (status_fav == 1){
+                    setFavorite();
                     btn_setFav.setBackgroundResource(R.drawable.bg_btn);
                     btn_setFav.setText("Favorited");
                     btn_setFav.setTextColor(Color.WHITE);
-                }else if (status_fav == 1){
+                }else if (status_fav == -1){
+                    deleteFav();
                     btn_setFav.setBackgroundResource(R.drawable.bg_btn2);
                     btn_setFav.setText("Add to Favorite");
                     btn_setFav.setTextColor(Color.BLACK);
@@ -122,6 +124,54 @@ public class NovelInfoActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    public void setFavorite(){
+        apiService.AddFavorite(id_novel,id_member)
+                .enqueue(new Callback<RespAddFavorite>() {
+                    @Override
+                    public void onResponse(Call<RespAddFavorite> call, Response<RespAddFavorite> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(NovelInfoActivity.this, "Data Tersimpan",
+                                    Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(NovelInfoActivity.this, "Data Kosong",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RespAddFavorite> call, Throwable t) {
+                        Toast.makeText(NovelInfoActivity.this, "Gagal menyimpan data",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+        }
+
+    public void deleteFav(){
+        apiService.DeleteFav(id_novel,id_member)
+                .enqueue(new Callback<RespDeleteFav>() {
+                    @Override
+                    public void onResponse(Call<RespDeleteFav> call, Response<RespDeleteFav> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(NovelInfoActivity.this, "Hapus dari favorit",
+                                    Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(NovelInfoActivity.this, "Data Kosong",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RespDeleteFav> call, Throwable t) {
+                        Toast.makeText(NovelInfoActivity.this, "Gagal menyimpan data",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+
+
 
 
 }

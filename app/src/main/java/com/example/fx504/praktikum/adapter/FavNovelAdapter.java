@@ -16,16 +16,17 @@ import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.activities.NovelInfoActivity;
 import com.example.fx504.praktikum.api.APIUrl;
-import com.example.fx504.praktikum.model.RespFavorite;
+import com.example.fx504.praktikum.model.RespFavMember;
 
 import java.util.List;
 
 public class FavNovelAdapter extends RecyclerView.Adapter<FavNovelAdapter.ViewHolder> {
 
     private Context context;
-    private List<RespFavorite> favNovel;
+    private List<RespFavMember> favNovel;
 
-    public FavNovelAdapter(Context context, List<RespFavorite> favNovel){
+
+    public FavNovelAdapter(Context context, List<RespFavMember> favNovel){
         this.context = context;
         this.favNovel = favNovel;
     }
@@ -40,18 +41,18 @@ public class FavNovelAdapter extends RecyclerView.Adapter<FavNovelAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
-        final RespFavorite respFavorite = favNovel.get(i);
-        viewHolder.id_novel = respFavorite.getId();
-        viewHolder.tv_novelTitle.setText(respFavorite.getNovelTitle());
-        viewHolder.tv_novelGenre.setText(respFavorite.getNovelGenre());
+        final RespFavMember respFavMember = favNovel.get(i);
+        viewHolder.id_novel = respFavMember.getId();
+        viewHolder.tv_novelTitle.setText(respFavMember.getNovelTitle());
+        viewHolder.tv_novelGenre.setText(respFavMember.getNovelGenre());
 
         String url_file = url();
 
         //image
         Glide.with(context)
-                .load(url_file+respFavorite.getNovelCover())
+                .load(url_file+ respFavMember.getNovelCover())
                 .into(viewHolder.iv_novelCover);
-        Log.wtf("getNovelCober",respFavorite.getNovelCover());
+        Log.wtf("getNovelCober", respFavMember.getNovelCover());
 
         //Intent and get id novel
         viewHolder.iv_novelCover.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +60,7 @@ public class FavNovelAdapter extends RecyclerView.Adapter<FavNovelAdapter.ViewHo
             public void onClick(View v) {
                 Intent intent = new Intent(viewHolder.itemView.getContext(), NovelInfoActivity.class);
                 intent.putExtra("id_novel",viewHolder.id_novel);
-                Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+respFavorite.getNovelTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+ respFavMember.getNovelTitle(), Toast.LENGTH_SHORT).show();
 
                 viewHolder.itemView.getContext().startActivity(intent);
             }
@@ -89,5 +90,4 @@ public class FavNovelAdapter extends RecyclerView.Adapter<FavNovelAdapter.ViewHo
         }
 
     }
-
 }

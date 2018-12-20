@@ -2,10 +2,7 @@ package com.example.fx504.praktikum.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RespFavorite{
-
-	@SerializedName("novel_status")
-	private String novelStatus;
+public class RespFavMember {
 
 	@SerializedName("updated_at")
 	private String updatedAt;
@@ -31,13 +28,8 @@ public class RespFavorite{
 	@SerializedName("novel_synopsis")
 	private String novelSynopsis;
 
-	public void setNovelStatus(String novelStatus){
-		this.novelStatus = novelStatus;
-	}
-
-	public String getNovelStatus(){
-		return novelStatus;
-	}
+	@SerializedName("status")
+	private int status;
 
 	public void setUpdatedAt(String updatedAt){
 		this.updatedAt = updatedAt;
@@ -103,19 +95,27 @@ public class RespFavorite{
 		return novelSynopsis;
 	}
 
+	public void setStatus(int status){
+		this.status = status;
+	}
+
+	public int getStatus(){
+		return status;
+	}
+
 	@Override
- 	public String toString(){
-		return 
-			"RespFavorite{" + 
-			"novel_status = '" + novelStatus + '\'' + 
-			",updated_at = '" + updatedAt + '\'' + 
-			",novel_title = '" + novelTitle + '\'' + 
-			",novel_story = '" + novelStory + '\'' + 
-			",novel_genre = '" + novelGenre + '\'' + 
-			",novel_cover = '" + novelCover + '\'' + 
-			",created_at = '" + createdAt + '\'' + 
-			",id = '" + id + '\'' + 
-			",novel_synopsis = '" + novelSynopsis + '\'' + 
-			"}";
-		}
+	public String toString(){
+		return
+				"RespMemberFav{" +
+						"updated_at = '" + updatedAt + '\'' +
+						",novel_title = '" + novelTitle + '\'' +
+						",novel_story = '" + novelStory + '\'' +
+						",novel_genre = '" + novelGenre + '\'' +
+						",novel_cover = '" + novelCover + '\'' +
+						",created_at = '" + createdAt + '\'' +
+						",id = '" + id + '\'' +
+						",novel_synopsis = '" + novelSynopsis + '\'' +
+						",status = '" + status + '\'' +
+						"}";
+	}
 }

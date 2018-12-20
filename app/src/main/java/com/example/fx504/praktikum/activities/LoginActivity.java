@@ -98,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                     sharePref.setDataString(SharePref.KEY_PHONE,""+response.body().getUserTlfn());
                     sharePref.setDataString(SharePref.KEY_EMAIL,""+response.body().getUserEmail());
                     sharePref.setDataInt(SharePref.KEY_STATUS,response.body().getStatus());
+                    sharePref.setDataInt(SharePref.KEY_ID,response.body().getUserId());
 
                     //status admin or member
                     int status = sharePref.getDataInt(SharePref.KEY_STATUS);
