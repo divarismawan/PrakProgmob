@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".OfflineActivity">
-    <LinearLayout
-        android:id="@+id/layout_update"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="#222431"
-        >
-        <com.victor.loading.newton.NewtonCradleLoading
-            android:id="@+id/newton_cradle_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true" />
-    </LinearLayout>
-
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -37,11 +23,11 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_finish"
+        android:id="@+id/rv_favorite"
+        android:padding="3dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
         android:layout_marginTop="5dp"
         />
 
-</RelativeLayout>
+</LinearLayout>

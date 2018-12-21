@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                                 tv_offline.setText("Offline Mode");
                                 setOfflineMode();
                             }
-                        },3000);
+                        },2000);
 
                     }
                 });

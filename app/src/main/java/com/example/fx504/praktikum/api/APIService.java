@@ -5,8 +5,8 @@ import com.example.fx504.praktikum.model.ResShowNovel;
 import com.example.fx504.praktikum.model.RespAddFavorite;
 import com.example.fx504.praktikum.model.RespAddNovel;
 import com.example.fx504.praktikum.model.RespDeleteFav;
-import com.example.fx504.praktikum.model.RespFavMember;
 import com.example.fx504.praktikum.model.RespFavorite;
+import com.example.fx504.praktikum.model.RespFinish;
 import com.example.fx504.praktikum.model.ResponseApi;
 import com.example.fx504.praktikum.model.ResponseLogin;
 
@@ -49,7 +49,7 @@ public interface APIService {
                                 @Part MultipartBody.Part novel_story,
                                 @Part MultipartBody.Part novel_cover);
 
-    @POST("showAllNovel")
+    @POST("showAllUpdate")
     Call<List<ResShowNovel>>showAllUpdate();
 
     @POST("selectNovel")
@@ -59,7 +59,7 @@ public interface APIService {
     Call<ResGetById>NovelGetById(@Path("id")int id);
 
     @GET("finishNovel")
-    Call<List<RespFavMember>> finishNovel();
+    Call<List<RespFinish>> finishNovel();
 
     @FormUrlEncoded
     @POST("addFavorite")

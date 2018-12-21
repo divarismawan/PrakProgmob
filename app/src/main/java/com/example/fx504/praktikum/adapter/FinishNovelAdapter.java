@@ -13,19 +13,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
+import com.example.fx504.praktikum.model.RespFinish;
 import com.example.fx504.praktikum.novels.NovelInfoActivity;
 import com.example.fx504.praktikum.api.APIUrl;
-import com.example.fx504.praktikum.model.RespFavMember;
 
 import java.util.List;
 
 public class FinishNovelAdapter extends RecyclerView.Adapter<FinishNovelAdapter.ViewHolder> {
 
     private Context context;
-    private List<RespFavMember> favMembers;
+    private List<RespFinish> favMembers;
 
 
-    public FinishNovelAdapter(Context context, List<RespFavMember> favMembers){
+    public FinishNovelAdapter(Context context, List<RespFinish> favMembers){
         this.context = context;
         this.favMembers = favMembers;
     }
@@ -40,7 +40,7 @@ public class FinishNovelAdapter extends RecyclerView.Adapter<FinishNovelAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
-        final RespFavMember respFavMember = favMembers.get(i);
+        final RespFinish respFavMember = favMembers.get(i);
         viewHolder.id_novel = respFavMember.getId();
         viewHolder.tv_novelTitle.setText(respFavMember.getNovelTitle());
         viewHolder.tv_novelGenre.setText(respFavMember.getNovelGenre());

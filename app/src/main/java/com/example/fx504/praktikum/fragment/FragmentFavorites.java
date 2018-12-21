@@ -31,7 +31,6 @@ public class FragmentFavorites extends Fragment {
 
     SharePref sharePref;
 
-    Intent intent;
     int id_user;
 
     View view;
@@ -39,8 +38,6 @@ public class FragmentFavorites extends Fragment {
 
     APIService apiService;
 
-//    FinishNovelAdapter finishNovelAdapter;
-//    List<RespFavMember> resFinish = new ArrayList<>();
     FavoriteAdapter favoriteAdapter;
     List<RespFavorite> favorites = new ArrayList<>();
 
@@ -63,33 +60,6 @@ public class FragmentFavorites extends Fragment {
 
         return view;
     }
-
-//    public void setMemberFav(){
-//         apiService.finishNovel()
-//                 .enqueue(new Callback<List<RespFavMember>>() {
-//                     @Override
-//                     public void onResponse(Call<List<RespFavMember>> call, Response<List<RespFavMember>> response) {
-//                         assert response.body() != null;
-//                         resFinish.clear();
-//                         resFinish.addAll(response.body());
-//                         setAdapterFavNovel();
-//                     }
-//
-//                     @Override
-//                     public void onFailure(Call<List<RespFavMember>> call, Throwable t) {
-//
-//                     }
-//                 });
-//
-//    }
-
-//    public void setAdapterFavNovel(){
-//        finishNovelAdapter = new FinishNovelAdapter(getContext(), resFinish);
-//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
-//        rv_favorite.setLayoutManager(gridLayoutManager);
-//        rv_favorite.setAdapter(finishNovelAdapter);
-//    }
-
     public void setFavorite(){
         apiService.NovelFavorite(id_user)
                 .enqueue(new Callback<List<RespFavorite>>() {

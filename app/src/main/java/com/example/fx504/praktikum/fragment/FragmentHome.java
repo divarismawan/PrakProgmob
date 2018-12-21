@@ -9,25 +9,30 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.example.fx504.praktikum.DB_Lite;
 import com.example.fx504.praktikum.activities.GenreActivity;
 import com.example.fx504.praktikum.R;
-import com.example.fx504.praktikum.adapter.FinishNovelAdapter;
+import com.example.fx504.praktikum.adapter.FavoriteAdapter;
 import com.example.fx504.praktikum.adapter.NewNovelAdapter;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.model.ResShowNovel;
-import com.example.fx504.praktikum.model.RespFavMember;
+import com.example.fx504.praktikum.model.RespFavorite;
+import com.example.fx504.praktikum.model.SharePref;
 import com.example.fx504.praktikum.novels.NovelAllUpdate;
 import com.example.fx504.praktikum.novels.NovelFinishActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,16 +45,23 @@ public class FragmentHome extends Fragment {
     ViewFlipper vf_novel;
     Intent intent;
 
+    SharePref sharePref;
+
+    int id_user;
+
     APIService apiService;
 
     NewNovelAdapter newNovelAdapter;
     List<ResShowNovel> resShowNovels = new ArrayList<>();
 
-    FinishNovelAdapter finishNovelAdapter;
-    List<RespFavMember> respFavMembers = new ArrayList<>();
 
     RecyclerView rv_favNovel;
     RecyclerView rv_newNovel;
+
+    FavoriteAdapter favoriteAdapter;
+    List<RespFavorite> favorites = new ArrayList<>();
+
+    DB_Lite db_lite;
 
 
 
@@ -59,12 +71,18 @@ public class FragmentHome extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+        db_lite = new DB_Lite(getContext());
+
         view = inflater.inflate(R.layout.fragment_home,container,false);
+
         apiService=APIClient.getService();
 
+        sharePref = new SharePref(Objects.requireNonNull(getContext()));
+
+        id_user = sharePref.getDataInt(SharePref.KEY_ID);
+
+
 //------------------ FIND ID ------------------//
-
-
 
 
         rv_favNovel = view.findViewById(R.id.rc_fav);
@@ -113,41 +131,54 @@ public class FragmentHome extends Fragment {
 
     //--------------------SET FAV NOVEL--------------------//
     public void setFav(){
-
-        apiService.finishNovel()
-                .enqueue(new Callback<List<RespFavMember>>() {
+        apiService.NovelFavorite(id_user)
+                .enqueue(new Callback<List<RespFavorite>>() {
                     @Override
-                    public void onResponse(Call<List<RespFavMember>> call, Response<List<RespFavMember>> response) {
-
+                    public void onResponse(Call<List<RespFavorite>> call, @NonNull Response<List<RespFavorite>> response) {
                         if (response.isSuccessful()){
-//                            Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
-                            //get all data Novel from API SERVICE
-                            assert response.body() != null;
-                            respFavMembers.clear();
-                            respFavMembers.addAll(response.body());
+                            favorites.clear();
+                            favorites.addAll(response.body());
                             setAdapterFavNovel();
-//                            loadingHomePage(false);
 
+                            db_lite.deleteData();
+                            for(int i=0;i<favorites.size();i++){
+                                RespFavorite rs = favorites.get(i);
+                                int id          = rs.getId();
+                                int status      = rs.getStatus();
+                                String title    = rs.getNovelTitle();
+                                String genre    = rs.getNovelGenre();
+                                String synopsis = rs.getNovelSynopsis();
+                                String story    = rs.getNovelStory();
+                                String cover    = rs.getNovelCover();
+                                String create   = rs.getCreatedAt();
+                                String update   = rs.getUpdatedAt();
+
+                                Log.wtf("data", id + status+title+genre+
+                                        synopsis+story+cover+create+update );
+
+                                db_lite.saveFavorite(id,status,title,genre,
+                                        synopsis,story,cover,create,update);
+                            }
                         }else {
-//                            Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Kosong", Toast.LENGTH_SHORT).show();
                         }
-
                     }
 
                     @Override
-                    public void onFailure(Call<List<RespFavMember>> call, Throwable t) {
-                    }
+                    public void onFailure(Call<List<RespFavorite>> call, Throwable t) {
+                        Toast.makeText(getContext(), "Koneksi gagal", Toast.LENGTH_SHORT).show();
 
+                    }
                 });
 
     }
 
     public void setAdapterFavNovel(){
-        finishNovelAdapter = new FinishNovelAdapter(getContext(), respFavMembers);
+        favoriteAdapter = new FavoriteAdapter(getContext(),favorites);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false);
         rv_favNovel.setLayoutManager(layoutManager);
-        rv_favNovel.setAdapter(finishNovelAdapter);
+        rv_favNovel.setAdapter(favoriteAdapter);
     }
 
     //--------------------BUTTON ACTION ICON--------------------//
@@ -219,6 +250,5 @@ public class FragmentHome extends Fragment {
         rv_newNovel.setLayoutManager(layoutManager);
         rv_newNovel.setAdapter(newNovelAdapter);
     }
-
 
 }

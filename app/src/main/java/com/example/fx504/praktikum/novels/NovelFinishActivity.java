@@ -12,7 +12,7 @@ import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.adapter.FinishNovelAdapter;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
-import com.example.fx504.praktikum.model.RespFavMember;
+import com.example.fx504.praktikum.model.RespFinish;
 import com.victor.loading.book.BookLoading;
 
 import java.util.ArrayList;
@@ -31,14 +31,13 @@ public class NovelFinishActivity extends AppCompatActivity {
     APIService apiService;
 
     FinishNovelAdapter finishNovelAdapter;
-    List<RespFavMember> resFinishNovel = new ArrayList<>();
+    List<RespFinish> resFinishNovel = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finish_novel);
 
-        layout_update = findViewById(R.id.layout_update);
         book_loading  = findViewById(R.id.book_loading);
         rv_finish  = findViewById(R.id.rv_finish);
 
@@ -51,16 +50,16 @@ public class NovelFinishActivity extends AppCompatActivity {
 
     public void setFinishNovel(){
         apiService.finishNovel()
-                .enqueue(new Callback<List<RespFavMember>>() {
+                .enqueue(new Callback<List<RespFinish>>() {
                     @Override
-                    public void onResponse(Call<List<RespFavMember>> call, Response<List<RespFavMember>> response) {
+                    public void onResponse(Call<List<RespFinish>> call, Response<List<RespFinish>> response) {
                         resFinishNovel.clear();
                         resFinishNovel.addAll(response.body());
                         setAdapterFavNovel();
                     }
 
                     @Override
-                    public void onFailure(Call<List<RespFavMember>> call, Throwable t) {
+                    public void onFailure(Call<List<RespFinish>> call, Throwable t) {
 
                     }
                 });
