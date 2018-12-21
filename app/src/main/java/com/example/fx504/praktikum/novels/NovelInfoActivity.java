@@ -1,4 +1,4 @@
-package com.example.fx504.praktikum.activities;
+package com.example.fx504.praktikum.novels;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -52,6 +52,9 @@ public class NovelInfoActivity extends AppCompatActivity {
 
         id_novel  = getIntent().getIntExtra("id_novel",0);
         id_member = sharePref.getDataInt(SharePref.KEY_ID);
+
+        Toast.makeText(this, "M "+id_member+"  V  "+id_novel, Toast.LENGTH_SHORT).show();
+
 
         iv_NovelCover   = findViewById(R.id.iv_novelCover);
         tv_NovelTitle   = findViewById(R.id.tv_novelTitlle);
@@ -167,10 +170,4 @@ public class NovelInfoActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
-
-
-
-
 }

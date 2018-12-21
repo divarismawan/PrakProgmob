@@ -1,35 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OfflineActivity"
-    android:orientation="vertical"
-    >
-    <TextView
+    tools:context=".OfflineActivity">
+    <LinearLayout
+        android:id="@+id/layout_update"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="Offline Mode"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:textColor="@color/colorWhite"
-        android:background="@color/colorPrimaryDark"
-        android:textStyle="bold"
-        android:fontFamily="monospace"/>
-    <android.support.v4.widget.NestedScrollView
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#222431"
+        >
+        <com.victor.loading.newton.NewtonCradleLoading
+            android:id="@+id/newton_cradle_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true" />
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
+        android:layout_height="50dp">
+        <TextView
+            android:id="@+id/tv_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="50dp"
+            android:text="Offline Mode"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:fontFamily="monospace"/>
+    </android.support.v7.widget.CardView>
 
-        <view
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@color/colorPrimaryDark"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_finish"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:layout_marginTop="5dp"
+        />
 
-    </android.support.v4.widget.NestedScrollView>
-</LinearLayout>
+</RelativeLayout>

@@ -6,29 +6,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.example.fx504.praktikum.activities.GenreActivity;
 import com.example.fx504.praktikum.R;
-import com.example.fx504.praktikum.adapter.FavNovelAdapter;
+import com.example.fx504.praktikum.adapter.FinishNovelAdapter;
 import com.example.fx504.praktikum.adapter.NewNovelAdapter;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.model.ResShowNovel;
 import com.example.fx504.praktikum.model.RespFavMember;
-import com.victor.loading.book.BookLoading;
+import com.example.fx504.praktikum.novels.NovelAllUpdate;
+import com.example.fx504.praktikum.novels.NovelFinishActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,15 +39,13 @@ public class FragmentHome extends Fragment {
 
     ViewFlipper vf_novel;
     Intent intent;
-    ImageView iv_allUpdate;
-    ImageView iv_genre;
 
     APIService apiService;
 
     NewNovelAdapter newNovelAdapter;
     List<ResShowNovel> resShowNovels = new ArrayList<>();
 
-    FavNovelAdapter favNovelAdapter;
+    FinishNovelAdapter finishNovelAdapter;
     List<RespFavMember> respFavMembers = new ArrayList<>();
 
     RecyclerView rv_favNovel;
@@ -69,8 +63,8 @@ public class FragmentHome extends Fragment {
         apiService=APIClient.getService();
 
 //------------------ FIND ID ------------------//
-        iv_allUpdate = view.findViewById(R.id.iv_allUpdate);
-        iv_genre     = view.findViewById(R.id.iv_genre);
+
+
 
 
         rv_favNovel = view.findViewById(R.id.rc_fav);
@@ -85,8 +79,10 @@ public class FragmentHome extends Fragment {
         // Update Novel
         newNovelView();
 
-        // Go to GenreActivity
+        // 3 Icon Button Intent
+        goAllUpdateActivity();
         goGenreActivity();
+        goFinishActivity();
 
         return view;
     }
@@ -118,7 +114,7 @@ public class FragmentHome extends Fragment {
     //--------------------SET FAV NOVEL--------------------//
     public void setFav(){
 
-        apiService.getFavNovel()
+        apiService.finishNovel()
                 .enqueue(new Callback<List<RespFavMember>>() {
                     @Override
                     public void onResponse(Call<List<RespFavMember>> call, Response<List<RespFavMember>> response) {
@@ -131,6 +127,7 @@ public class FragmentHome extends Fragment {
                             respFavMembers.addAll(response.body());
                             setAdapterFavNovel();
 //                            loadingHomePage(false);
+
                         }else {
 //                            Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
                         }
@@ -146,16 +143,29 @@ public class FragmentHome extends Fragment {
     }
 
     public void setAdapterFavNovel(){
-        favNovelAdapter = new FavNovelAdapter(getContext(), respFavMembers);
+        finishNovelAdapter = new FinishNovelAdapter(getContext(), respFavMembers);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.HORIZONTAL, false);
         rv_favNovel.setLayoutManager(layoutManager);
-        rv_favNovel.setAdapter(favNovelAdapter);
+        rv_favNovel.setAdapter(finishNovelAdapter);
     }
 
     //--------------------BUTTON ACTION ICON--------------------//
 
+    public void goAllUpdateActivity(){
+        ImageView iv_allUpdate = view.findViewById(R.id.iv_allUpdate);
+
+        iv_allUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(getActivity(),NovelAllUpdate.class);
+                startActivity(intent);
+            }
+        });
+    }
+
     public void goGenreActivity(){
+        ImageView iv_genre     = view.findViewById(R.id.iv_genre);
         iv_genre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +174,18 @@ public class FragmentHome extends Fragment {
             }
         });
     }
+
+    public void goFinishActivity(){
+        ImageView iv_finish     = view.findViewById(R.id.iv_finish);
+        iv_finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(getActivity(),NovelFinishActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     //--------------------NEW UPDATE NOVEL--------------------//
 

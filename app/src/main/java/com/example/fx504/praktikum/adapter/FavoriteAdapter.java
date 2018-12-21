@@ -10,26 +10,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
-import com.example.fx504.praktikum.activities.NovelInfoActivity;
 import com.example.fx504.praktikum.api.APIUrl;
-import com.example.fx504.praktikum.model.RespFavMember;
+import com.example.fx504.praktikum.model.RespFavorite;
+import com.example.fx504.praktikum.novels.NovelInfoActivity;
 
 import java.util.List;
 
-public class FavNovelAdapter extends RecyclerView.Adapter<FavNovelAdapter.ViewHolder> {
+public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
+
 
     private Context context;
-    private List<RespFavMember> favNovel;
+    private List<RespFavorite> finishNovel;
 
 
-    public FavNovelAdapter(Context context, List<RespFavMember> favNovel){
+    public FavoriteAdapter(Context context, List<RespFavorite> finishNovel){
         this.context = context;
-        this.favNovel = favNovel;
+        this.finishNovel = finishNovel;
     }
+
+
+
 
     @NonNull
     @Override
@@ -41,7 +44,7 @@ public class FavNovelAdapter extends RecyclerView.Adapter<FavNovelAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
-        final RespFavMember respFavMember = favNovel.get(i);
+        final RespFavorite respFavMember = finishNovel.get(i);
         viewHolder.id_novel = respFavMember.getId();
         viewHolder.tv_novelTitle.setText(respFavMember.getNovelTitle());
         viewHolder.tv_novelGenre.setText(respFavMember.getNovelGenre());
@@ -68,7 +71,7 @@ public class FavNovelAdapter extends RecyclerView.Adapter<FavNovelAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return favNovel.size();
+        return finishNovel.size();
     }
 
     private String url(){

@@ -1,4 +1,4 @@
-package com.example.fx504.praktikum.activities;
+package com.example.fx504.praktikum.novels;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

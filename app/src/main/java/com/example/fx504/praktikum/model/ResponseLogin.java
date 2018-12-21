@@ -7,7 +7,7 @@ public class ResponseLogin{
 	@SerializedName("user_email")
 	private String userEmail;
 
-	@SerializedName("user_id")
+	@SerializedName("id")
 	private int userId;
 
 	@SerializedName("user_name")

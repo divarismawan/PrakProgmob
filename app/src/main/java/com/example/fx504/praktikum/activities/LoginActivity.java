@@ -96,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
 
                     //save data user and show in Fragment Profile
+                    assert response.body() != null;
                     sharePref.setDataString(SharePref.KEY_TOKEN,""+response.body().getToken());
                     sharePref.setDataString(SharePref.KEY_NAME,""+response.body().getUserName());
                     sharePref.setDataString(SharePref.KEY_PHONE,""+response.body().getUserTlfn());

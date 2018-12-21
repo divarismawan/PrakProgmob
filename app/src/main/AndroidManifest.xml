@@ -22,12 +22,12 @@
         </activity>
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".fragment.MainActivity"></activity>
+        <activity android:name=".fragment.MainActivity" />
         <activity android:name=".activities.FullScreenActivity" />
-        <activity android:name=".activities.NovelInfoActivity" />
+        <activity android:name=".novels.NovelInfoActivity" />
         <activity android:name=".admin.AddNovel" />
         <activity android:name=".admin.HomeAdmin" />
-        <activity android:name=".activities.NovelReadActivity" />
+        <activity android:name=".novels.NovelReadActivity" />
         <activity android:name=".activities.GenreActivity" />
 
         <service
@@ -38,7 +38,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".OfflineActivity"></activity>
+        <activity android:name=".OfflineActivity" />
+        <activity android:name=".novels.NovelAllUpdate" />
+        <activity android:name=".novels.NovelFinishActivity"></activity>
     </application>
 
 </manifest>
