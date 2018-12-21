@@ -124,7 +124,7 @@ public class FragmentHome extends Fragment {
                     public void onResponse(Call<List<RespFavMember>> call, Response<List<RespFavMember>> response) {
 
                         if (response.isSuccessful()){
-                            Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
                             //get all data Novel from API SERVICE
                             assert response.body() != null;
                             respFavMembers.clear();
@@ -132,7 +132,7 @@ public class FragmentHome extends Fragment {
                             setAdapterFavNovel();
 //                            loadingHomePage(false);
                         }else {
-                            Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -174,14 +174,14 @@ public class FragmentHome extends Fragment {
                     public void onResponse(@NonNull Call<List<ResShowNovel>> call,
                                            @NonNull Response<List<ResShowNovel>> response) {
                         if (response.isSuccessful()){
-                            Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
                             //get all data Novel from API SERVICE
                             assert response.body() != null;
                             resShowNovels.clear();
                             resShowNovels.addAll(response.body());
                             setAdapterNewNovel();
                         }else {
-                            Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
                         }
                     }
 

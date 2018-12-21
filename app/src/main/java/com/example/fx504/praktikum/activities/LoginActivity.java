@@ -20,6 +20,7 @@ import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.fragment.MainActivity;
 import com.example.fx504.praktikum.model.ResponseLogin;
 import com.example.fx504.praktikum.model.SharePref;
+import com.victor.loading.rotate.RotateLoading;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btn_login;
     TextView tv_signUp;
 
-    ProgressBar pb_login;
+    RotateLoading rotateLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         btn_login    = findViewById(R.id.btn_login);
         tv_signUp    = findViewById(R.id.tv_signUp);
 
-        pb_login     = findViewById(R.id.pb_login);
+
+        rotateLoading = findViewById(R.id.rotateloading);
 //----------------------------USE FUNCTION----------------------------//
         //Login
         setBtn_login();
@@ -166,11 +168,11 @@ public class LoginActivity extends AppCompatActivity {
 
     public void setLoading(Boolean status){
         if (status){
-            pb_login.setVisibility(View.VISIBLE);
+            rotateLoading.start();
             layout_login.setVisibility(View.INVISIBLE);
         }else {
-            pb_login.setVisibility(View.INVISIBLE);
-            layout_login.setVisibility(View.INVISIBLE);
+            rotateLoading.stop();
+            layout_login.setVisibility(View.VISIBLE);
         }
     }
 

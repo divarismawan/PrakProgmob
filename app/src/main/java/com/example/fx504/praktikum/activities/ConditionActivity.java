@@ -7,18 +7,22 @@ import android.os.Handler;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 import com.example.fx504.praktikum.admin.HomeAdmin;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.fragment.MainActivity;
 import com.example.fx504.praktikum.model.SharePref;
+import com.victor.loading.rotate.RotateLoading;
 
 public class ConditionActivity extends Activity {
 
     int SET_TIMER = 1500;
     ImageView iv_logo;
     SharePref sharePref;
+
+    RotateLoading rotateLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,9 @@ public class ConditionActivity extends Activity {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+
+        rotateLoading = findViewById(R.id.rotateloading);
+        rotateLoading.start();
 
         sharePref = new SharePref(this);
 

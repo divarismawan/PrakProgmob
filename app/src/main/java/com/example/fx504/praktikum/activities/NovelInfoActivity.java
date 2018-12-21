@@ -86,14 +86,10 @@ public class NovelInfoActivity extends AppCompatActivity {
                 status_fav *=-1;
                 if (status_fav == 1){
                     setFavorite();
-                    btn_setFav.setBackgroundResource(R.drawable.bg_btn);
-                    btn_setFav.setText("Favorited");
-                    btn_setFav.setTextColor(Color.WHITE);
+
                 }else if (status_fav == -1){
                     deleteFav();
-                    btn_setFav.setBackgroundResource(R.drawable.bg_btn2);
-                    btn_setFav.setText("Add to Favorite");
-                    btn_setFav.setTextColor(Color.BLACK);
+
                 }
             }
         });
@@ -132,8 +128,9 @@ public class NovelInfoActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<RespAddFavorite> call, Response<RespAddFavorite> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(NovelInfoActivity.this, "Data Tersimpan",
-                                    Toast.LENGTH_SHORT).show();
+                            btn_setFav.setBackgroundResource(R.drawable.bg_btn);
+                            btn_setFav.setText("Favorited");
+                            btn_setFav.setTextColor(Color.WHITE);
                         }else {
                             Toast.makeText(NovelInfoActivity.this, "Data Kosong",
                                     Toast.LENGTH_SHORT).show();
@@ -154,8 +151,9 @@ public class NovelInfoActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<RespDeleteFav> call, Response<RespDeleteFav> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(NovelInfoActivity.this, "Hapus dari favorit",
-                                    Toast.LENGTH_SHORT).show();
+                            btn_setFav.setBackgroundResource(R.drawable.bg_btn2);
+                            btn_setFav.setText("Add to Favorite");
+                            btn_setFav.setTextColor(Color.BLACK);
                         }else {
                             Toast.makeText(NovelInfoActivity.this, "Data Kosong",
                                     Toast.LENGTH_SHORT).show();
