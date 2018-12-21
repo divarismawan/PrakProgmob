@@ -108,6 +108,7 @@ public class NovelInfoActivity extends AppCompatActivity {
                         if (response.isSuccessful()){
 
                             tv_NovelTitle.setText(response.body().getNovelTitle());
+                            tv_NovelRelease.setText(response.body().getCreatedAt());
                             tv_NovelGenre.setText(response.body().getNovelGenre());
                             tv_NovelDecs.setText(response.body().getNovelSynopsis());
 

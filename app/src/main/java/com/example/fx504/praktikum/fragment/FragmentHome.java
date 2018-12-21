@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -25,6 +28,7 @@ import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.model.ResShowNovel;
 import com.example.fx504.praktikum.model.RespFavMember;
+import com.victor.loading.book.BookLoading;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +39,12 @@ import retrofit2.Response;
 
 public class FragmentHome extends Fragment {
 
+    View view;
+
     ViewFlipper vf_novel;
     Intent intent;
     ImageView iv_allUpdate;
     ImageView iv_genre;
-    View view;
 
     APIService apiService;
 
@@ -51,6 +56,8 @@ public class FragmentHome extends Fragment {
 
     RecyclerView rv_favNovel;
     RecyclerView rv_newNovel;
+
+
 
     @Nullable
     @Override
@@ -64,6 +71,7 @@ public class FragmentHome extends Fragment {
 //------------------ FIND ID ------------------//
         iv_allUpdate = view.findViewById(R.id.iv_allUpdate);
         iv_genre     = view.findViewById(R.id.iv_genre);
+
 
         rv_favNovel = view.findViewById(R.id.rc_fav);
         rv_newNovel = view.findViewById(R.id.rc_novelRilis);
@@ -109,10 +117,12 @@ public class FragmentHome extends Fragment {
 
     //--------------------SET FAV NOVEL--------------------//
     public void setFav(){
+
         apiService.getFavNovel()
                 .enqueue(new Callback<List<RespFavMember>>() {
                     @Override
                     public void onResponse(Call<List<RespFavMember>> call, Response<List<RespFavMember>> response) {
+
                         if (response.isSuccessful()){
                             Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
                             //get all data Novel from API SERVICE
@@ -120,16 +130,19 @@ public class FragmentHome extends Fragment {
                             respFavMembers.clear();
                             respFavMembers.addAll(response.body());
                             setAdapterFavNovel();
+//                            loadingHomePage(false);
                         }else {
                             Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
                         }
+
                     }
 
                     @Override
                     public void onFailure(Call<List<RespFavMember>> call, Throwable t) {
-
                     }
+
                 });
+
     }
 
     public void setAdapterFavNovel(){
@@ -174,8 +187,6 @@ public class FragmentHome extends Fragment {
 
                     @Override
                     public void onFailure(@NonNull Call<List<ResShowNovel>> call, @NonNull Throwable t) {
-                        Toast.makeText(getContext(), "API ERROR", Toast.LENGTH_SHORT).show();
-                        Log.wtf("errorGetNovel",t.getMessage());
                         }
                 });
     }
@@ -186,5 +197,6 @@ public class FragmentHome extends Fragment {
         rv_newNovel.setLayoutManager(layoutManager);
         rv_newNovel.setAdapter(newNovelAdapter);
     }
+
 
 }

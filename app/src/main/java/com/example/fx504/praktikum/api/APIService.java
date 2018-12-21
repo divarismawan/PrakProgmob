@@ -24,6 +24,9 @@ import retrofit2.http.Path;
 
 public interface APIService {
 
+    @GET("my_api")
+    Call<ResponseApi>CheckConncetion();
+
     @FormUrlEncoded
     @POST("register")
     Call<ResponseApi>CreateMember(@Field("user_name") String user_name,

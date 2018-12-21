@@ -13,29 +13,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ConditionActivity" >
+        <activity android:name=".activities.ConditionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.MainActivity">
-        </activity>
+        <activity android:name=".fragment.MainActivity"></activity>
         <activity android:name=".activities.FullScreenActivity" />
         <activity android:name=".activities.NovelInfoActivity" />
-        <activity android:name=".admin.AddNovel"/>
-        <activity android:name=".admin.HomeAdmin"/>
+        <activity android:name=".admin.AddNovel" />
+        <activity android:name=".admin.HomeAdmin" />
         <activity android:name=".activities.NovelReadActivity" />
-        <activity android:name=".activities.GenreActivity"/>
+        <activity android:name=".activities.GenreActivity" />
 
-        <service android:name=".MessagingService"
+        <service
+            android:name=".MessagingService"
             android:stopWithTask="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".OfflineActivity"></activity>
     </application>
 
 </manifest>

@@ -9,4 +9,12 @@
     <color name="colorUpdate">#1faa00</color>
     <color name="colorPage">#006db3</color>
     <color name="colorAllert">#ff0000</color>
+
+
+
+    <!--Book loading-->
+
+    <color name="book_loading_background">#222431</color>
+    <color name="book_loading_book">#fdfdfe</color>
+    <color name="book_loading_page">#222431</color>
 </resources>

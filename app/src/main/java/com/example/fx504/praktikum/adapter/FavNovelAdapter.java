@@ -60,8 +60,7 @@ public class FavNovelAdapter extends RecyclerView.Adapter<FavNovelAdapter.ViewHo
             public void onClick(View v) {
                 Intent intent = new Intent(viewHolder.itemView.getContext(), NovelInfoActivity.class);
                 intent.putExtra("id_novel",viewHolder.id_novel);
-                Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+ respFavMember.getNovelTitle(), Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+ respFavMember.getNovelTitle(), Toast.LENGTH_SHORT).show();
                 viewHolder.itemView.getContext().startActivity(intent);
             }
         });

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.example.fx504.praktikum.admin.HomeAdmin;
 import com.example.fx504.praktikum.R;
+import com.example.fx504.praktikum.fragment.MainActivity;
 import com.example.fx504.praktikum.model.SharePref;
 
 public class ConditionActivity extends Activity {

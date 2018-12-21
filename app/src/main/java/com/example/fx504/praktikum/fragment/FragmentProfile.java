@@ -121,7 +121,6 @@ public class FragmentProfile extends Fragment {
             @Override
             public void onClick(View v) {
 
-//                Intent cameraIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 if (ActivityCompat.checkSelfPermission(getActivity(),
                         Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(
