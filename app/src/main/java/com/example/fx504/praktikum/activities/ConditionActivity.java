@@ -7,12 +7,11 @@ import android.os.Handler;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 import com.example.fx504.praktikum.admin.HomeAdmin;
 import com.example.fx504.praktikum.R;
-import com.example.fx504.praktikum.fragment.MainActivity;
+import com.example.fx504.praktikum.MainActivity;
 import com.example.fx504.praktikum.model.SharePref;
 import com.victor.loading.rotate.RotateLoading;
 

@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +16,7 @@ import com.example.fx504.praktikum.admin.HomeAdmin;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
-import com.example.fx504.praktikum.fragment.MainActivity;
+import com.example.fx504.praktikum.MainActivity;
 import com.example.fx504.praktikum.model.ResponseLogin;
 import com.example.fx504.praktikum.model.SharePref;
 import com.victor.loading.rotate.RotateLoading;

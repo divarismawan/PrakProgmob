@@ -18,7 +18,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.example.fx504.praktikum.DB_Lite;
-import com.example.fx504.praktikum.activities.GenreActivity;
+import com.example.fx504.praktikum.novels.NovelGenreActivity;
 import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.adapter.FavoriteAdapter;
 import com.example.fx504.praktikum.adapter.NewNovelAdapter;
@@ -140,33 +140,34 @@ public class FragmentHome extends Fragment {
                             favorites.addAll(response.body());
                             setAdapterFavNovel();
 
-                            db_lite.deleteData();
-                            for(int i=0;i<favorites.size();i++){
-                                RespFavorite rs = favorites.get(i);
-                                int id          = rs.getId();
-                                int status      = rs.getStatus();
-                                String title    = rs.getNovelTitle();
-                                String genre    = rs.getNovelGenre();
-                                String synopsis = rs.getNovelSynopsis();
-                                String story    = rs.getNovelStory();
-                                String cover    = rs.getNovelCover();
-                                String create   = rs.getCreatedAt();
-                                String update   = rs.getUpdatedAt();
-
-                                Log.wtf("data", id + status+title+genre+
-                                        synopsis+story+cover+create+update );
-
-                                db_lite.saveFavorite(id,status,title,genre,
-                                        synopsis,story,cover,create,update);
-                            }
+//                            Input Data to SQL Lite
+//                            db_lite.deleteData();
+//                            for(int i=0;i<favorites.size();i++){
+//                                RespFavorite rs = favorites.get(i);
+//                                int id          = rs.getId();
+//                                int status      = rs.getStatus();
+//                                String title    = rs.getNovelTitle();
+//                                String genre    = rs.getNovelGenre();
+//                                String synopsis = rs.getNovelSynopsis();
+//                                String story    = rs.getNovelStory();
+//                                String cover    = rs.getNovelCover();
+//                                String create   = rs.getCreatedAt();
+//                                String update   = rs.getUpdatedAt();
+//
+//                                Log.wtf("data", id + status+title+genre+
+//                                        synopsis+story+cover+create+update );
+//
+//                                db_lite.saveFavorite(id,status,title,genre,
+//                                        synopsis,story,cover,create,update);
+//                            }
                         }else {
-                            Toast.makeText(getContext(), "Kosong", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), "Kosong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<List<RespFavorite>> call, Throwable t) {
-                        Toast.makeText(getContext(), "Koneksi gagal", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), "Koneksi gagal", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -200,7 +201,7 @@ public class FragmentHome extends Fragment {
         iv_genre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent = new Intent(getActivity(),GenreActivity.class);
+                intent = new Intent(getActivity(),NovelGenreActivity.class);
                 startActivity(intent);
             }
         });

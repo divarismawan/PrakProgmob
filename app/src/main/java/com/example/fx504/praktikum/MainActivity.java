@@ -1,4 +1,4 @@
-package com.example.fx504.praktikum.fragment;
+package com.example.fx504.praktikum;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,15 +11,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.fx504.praktikum.OfflineActivity;
-import com.example.fx504.praktikum.R;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
+import com.example.fx504.praktikum.fragment.FragmentFavorites;
+import com.example.fx504.praktikum.fragment.FragmentHome;
+import com.example.fx504.praktikum.fragment.FragmentProfile;
 import com.example.fx504.praktikum.model.ResponseApi;
 import com.victor.loading.book.BookLoading;
 
@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         handler = new Handler();
 
-        cekKoneksi();
+//        cekKoneksi();
+        loadingHomePage(false);
 
 
 
