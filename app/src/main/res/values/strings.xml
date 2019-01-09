@@ -4,9 +4,9 @@
     <string-array name="genre_list">
         <item>Action</item>
         <item>Comedy</item>
-        <item>Fantasy</item>
-        <item>History</item>
         <item>Romance</item>
+        <item>Horror</item>
+        <item>Sci Fi</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

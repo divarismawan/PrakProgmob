@@ -161,13 +161,11 @@ public class FragmentHome extends Fragment {
 //                                        synopsis,story,cover,create,update);
 //                            }
                         }else {
-//                            Toast.makeText(getContext(), "Kosong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<List<RespFavorite>> call, Throwable t) {
-//                        Toast.makeText(getContext(), "Koneksi gagal", Toast.LENGTH_SHORT).show();
 
                     }
                 });

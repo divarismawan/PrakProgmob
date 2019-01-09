@@ -19,6 +19,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
@@ -74,5 +75,8 @@ public interface APIService {
     @FormUrlEncoded
     @POST("getfav")
     Call<List<RespFavorite>>NovelFavorite(@Field("user_id")int user_id);
+
+    @GET("getByGenre/{novel_genre}")
+    Call<List<ResShowNovel>>NovelByGenre(@Path("novel_genre") String genre);
 
 }

@@ -1,20 +1,36 @@
 package com.example.fx504.praktikum.novels;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.Toast;
 
-import com.example.fx504.praktikum.NovelGenreAdapter;
 import com.example.fx504.praktikum.R;
+import com.example.fx504.praktikum.adapter.NewNovelAdapter;
+import com.example.fx504.praktikum.api.APIClient;
+import com.example.fx504.praktikum.api.APIService;
+import com.example.fx504.praktikum.model.ResShowNovel;
+import com.example.fx504.praktikum.model.RespAddNovel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NovelGenreActivity extends AppCompatActivity {
+
+    APIService apiService;
+
+    NewNovelAdapter newNovelAdapter;
+    List<ResShowNovel> resShowNovels = new ArrayList<>();
+
+    RecyclerView rv_genre;
 
     static Button btn_action;
     static Button btn_comedy;
@@ -28,82 +44,84 @@ public class NovelGenreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novelgenre);
 
+        apiService = APIClient.getService();
+
         btn_action  = findViewById(R.id.btn_action);
         btn_comedy  = findViewById(R.id.btn_comedy);
         btn_romance = findViewById(R.id.btn_romance);
         btn_horror  = findViewById(R.id.btn_horror);
         btn_sol     = findViewById(R.id.btn_sol);
 
-        button_clicked(btn_action,1);
-        button_clicked(btn_comedy,2);
-        button_clicked(btn_romance,3);
-        button_clicked(btn_horror,4);
-        button_clicked(btn_sol,5);
+        button_genre(btn_action,"Action");
+        button_genre(btn_comedy,"Comedy");
+        button_genre(btn_romance,"Romance");
+        button_genre(btn_horror,"Horror");
+        button_genre(btn_sol,"Sci Fi");
 
-        setSwipe();
+        rv_genre = findViewById(R.id.rv_genre);
+
+        novelbyGenre("Action");
 
     }
 
-//    public void testing(int val ){
-//        switch (val){
-//            case 1:
-//                btn_action.setBackgroundColor(Color.parseColor("#222431"));
-//                viewer.setBackgroundColor(Color.parseColor("#222431"));
-//                break;
-//
-//
-//        }
-//    }
+    public void novelbyGenre(final String genre){
+        apiService.NovelByGenre(genre)
+                .enqueue(new Callback<List<ResShowNovel>>() {
+                    @Override
+                    public void onResponse(Call<List<ResShowNovel>> call, Response<List<ResShowNovel>> response) {
+                        if (response.isSuccessful()){
+                            resShowNovels.clear();
+                            assert response.body() != null;
+                            resShowNovels.addAll(response.body());
+                            setAdapter();
+                        }
+                    }
 
-    public void button_clicked(final Button btn, final int val){
-        final Intent intent = new Intent();
+                    @Override
+                    public void onFailure(Call<List<ResShowNovel>> call, Throwable t) {
+                        Toast.makeText(NovelGenreActivity.this, "Gagal Konek", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void testis(){
+        apiService.showAllUpdate()
+                .enqueue(new Callback<List<ResShowNovel>>() {
+                    @Override
+                    public void onResponse(Call<List<ResShowNovel>> call, Response<List<ResShowNovel>> response) {
+                        resShowNovels.clear();
+                        resShowNovels.addAll(response.body());
+                        setAdapter();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<ResShowNovel>> call, Throwable t) {
+
+                    }
+                });
+    }
+
+    public void setAdapter(){
+        newNovelAdapter = new NewNovelAdapter(this,resShowNovels);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,3);
+        rv_genre.setLayoutManager(layoutManager);
+        rv_genre.setAdapter(newNovelAdapter);
+    }
+
+    public void button_genre(final Button btn, final String genre){
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_action.setBackgroundColor(Color.parseColor("#ffffff"));
-                btn_comedy.setBackgroundColor(Color.parseColor("#ffffff"));
-                btn_romance.setBackgroundColor(Color.parseColor("#ffffff"));
-                btn_horror.setBackgroundColor(Color.parseColor("#ffffff"));
-                btn_sol.setBackgroundColor(Color.parseColor("#ffffff"));
-                btn.setBackgroundColor(Color.parseColor("#222431"));
-                intent.putExtra("ValButton",val);
+            btn_action.setBackgroundColor(Color.parseColor("#ffffff"));
+            btn_comedy.setBackgroundColor(Color.parseColor("#ffffff"));
+            btn_romance.setBackgroundColor(Color.parseColor("#ffffff"));
+            btn_horror.setBackgroundColor(Color.parseColor("#ffffff"));
+            btn_sol.setBackgroundColor(Color.parseColor("#ffffff"));
+            btn.setBackgroundColor(Color.parseColor("#222431"));
+            novelbyGenre(genre);
+                Toast.makeText(NovelGenreActivity.this, genre, Toast.LENGTH_SHORT).show();
+
             }
         });
     }
-
-    public void colorPositionButton(int val){
-        btn_action.setBackgroundColor(Color.parseColor("#ffffff"));
-        btn_comedy.setBackgroundColor(Color.parseColor("#ffffff"));
-        btn_romance.setBackgroundColor(Color.parseColor("#ffffff"));
-        btn_horror.setBackgroundColor(Color.parseColor("#ffffff"));
-        btn_sol.setBackgroundColor(Color.parseColor("#ffffff"));
-        switch (val){
-            case 1:
-                btn_action.setBackgroundColor(Color.parseColor("#222431"));
-                break;
-            case 2:
-                btn_comedy.setBackgroundColor(Color.parseColor("#222431"));
-                break;
-            case 3:
-                btn_romance.setBackgroundColor(Color.parseColor("#222431"));
-                break;
-            case 4:
-                btn_horror.setBackgroundColor(Color.parseColor("#222431"));
-                break;
-            case 5:
-                btn_sol.setBackgroundColor(Color.parseColor("#222431"));
-                break;
-
-        }
-
-    }
-
-    private void setSwipe(){
-        ViewPager view_pager = findViewById(R.id.view_pager);
-        view_pager.setOffscreenPageLimit(1);
-        NovelGenreAdapter novelGenreAdapter = new NovelGenreAdapter(getSupportFragmentManager());
-        view_pager.setAdapter(novelGenreAdapter);
-        view_pager.setCurrentItem(0);
-    }
-
 }
