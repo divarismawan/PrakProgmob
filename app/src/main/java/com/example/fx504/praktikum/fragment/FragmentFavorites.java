@@ -66,19 +66,16 @@ public class FragmentFavorites extends Fragment {
                     @Override
                     public void onResponse(Call<List<RespFavorite>> call, Response<List<RespFavorite>> response) {
                         if (response.isSuccessful()){
-                            Toast.makeText(getContext(), "YAY!!!", Toast.LENGTH_SHORT).show();
                             favorites.clear();
                             assert response.body() != null;
                             favorites.addAll(response.body());
                             setAdapterFavNovel();
                         }else {
-                            Toast.makeText(getContext(), "Kosong", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<List<RespFavorite>> call, Throwable t) {
-                        Toast.makeText(getContext(), "Koneksi gagal", Toast.LENGTH_SHORT).show();
 
                     }
                 });

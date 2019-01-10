@@ -5,16 +5,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.fx504.praktikum.R;
+import com.example.fx504.praktikum.adapter.FavoriteAdapter;
+import com.example.fx504.praktikum.adapter.GenreAdapter;
 import com.example.fx504.praktikum.adapter.NewNovelAdapter;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.model.ResShowNovel;
 import com.example.fx504.praktikum.model.RespAddNovel;
+import com.example.fx504.praktikum.model.RespFavorite;
+import com.example.fx504.praktikum.model.RespGenre;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +34,9 @@ public class NovelGenreActivity extends AppCompatActivity {
 
     NewNovelAdapter newNovelAdapter;
     List<ResShowNovel> resShowNovels = new ArrayList<>();
+
+    GenreAdapter genreAdapter;
+    List<RespGenre> respGenres = new ArrayList<>();
 
     RecyclerView rv_genre;
 
@@ -65,40 +73,22 @@ public class NovelGenreActivity extends AppCompatActivity {
     }
 
     public void novelbyGenre(final String genre){
-        apiService.NovelByGenre(genre)
-                .enqueue(new Callback<List<ResShowNovel>>() {
-                    @Override
-                    public void onResponse(Call<List<ResShowNovel>> call, Response<List<ResShowNovel>> response) {
-                        if (response.isSuccessful()){
-                            resShowNovels.clear();
-                            assert response.body() != null;
-                            resShowNovels.addAll(response.body());
-                            setAdapter();
-                        }
-                    }
+       apiService.NovelByGenre(genre)
+               .enqueue(new Callback<List<RespGenre>>() {
+                   @Override
+                   public void onResponse(Call<List<RespGenre>> call, Response<List<RespGenre>> response) {
+                       respGenres.clear();
+                       respGenres.addAll(response.body());
+                       setAdapter();
+                       Toast.makeText(NovelGenreActivity.this, "Yes", Toast.LENGTH_SHORT).show();
+                   }
 
-                    @Override
-                    public void onFailure(Call<List<ResShowNovel>> call, Throwable t) {
-                        Toast.makeText(NovelGenreActivity.this, "Gagal Konek", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    public void testis(){
-        apiService.showAllUpdate()
-                .enqueue(new Callback<List<ResShowNovel>>() {
-                    @Override
-                    public void onResponse(Call<List<ResShowNovel>> call, Response<List<ResShowNovel>> response) {
-                        resShowNovels.clear();
-                        resShowNovels.addAll(response.body());
-                        setAdapter();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<ResShowNovel>> call, Throwable t) {
-
-                    }
-                });
+                   @Override
+                   public void onFailure(Call<List<RespGenre>> call, Throwable t) {
+                       Log.d("kosong", t.getMessage());
+                       Toast.makeText(NovelGenreActivity.this, "Nyerah", Toast.LENGTH_SHORT).show();
+                   }
+               });
     }
 
     public void setAdapter(){

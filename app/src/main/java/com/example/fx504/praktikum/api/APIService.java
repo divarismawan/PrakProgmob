@@ -7,6 +7,7 @@ import com.example.fx504.praktikum.model.RespAddNovel;
 import com.example.fx504.praktikum.model.RespDeleteFav;
 import com.example.fx504.praktikum.model.RespFavorite;
 import com.example.fx504.praktikum.model.RespFinish;
+import com.example.fx504.praktikum.model.RespGenre;
 import com.example.fx504.praktikum.model.ResponseApi;
 import com.example.fx504.praktikum.model.ResponseLogin;
 
@@ -77,6 +78,6 @@ public interface APIService {
     Call<List<RespFavorite>>NovelFavorite(@Field("user_id")int user_id);
 
     @GET("getByGenre/{novel_genre}")
-    Call<List<ResShowNovel>>NovelByGenre(@Path("novel_genre") String genre);
+    Call<List<RespGenre>>NovelByGenre(@Path("novel_genre") String genre);
 
 }
