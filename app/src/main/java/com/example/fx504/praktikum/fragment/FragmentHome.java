@@ -45,9 +45,7 @@ public class FragmentHome extends Fragment {
     ViewFlipper vf_novel;
     Intent intent;
 
-    SharePref sharePref;
 
-    int id_user;
 
     APIService apiService;
 
@@ -76,10 +74,6 @@ public class FragmentHome extends Fragment {
         view = inflater.inflate(R.layout.fragment_home,container,false);
 
         apiService=APIClient.getService();
-
-        sharePref = new SharePref(Objects.requireNonNull(getContext()));
-
-        id_user = sharePref.getDataInt(SharePref.KEY_ID);
 
 
 //------------------ FIND ID ------------------//
@@ -131,6 +125,8 @@ public class FragmentHome extends Fragment {
 
     //--------------------SET FAV NOVEL--------------------//
     public void setFav(){
+        SharePref sharePref = new SharePref(Objects.requireNonNull(getContext()));
+        int id_user = sharePref.getDataInt(SharePref.KEY_ID);
         apiService.NovelFavorite(id_user)
                 .enqueue(new Callback<List<RespFavorite>>() {
                     @Override
@@ -226,14 +222,12 @@ public class FragmentHome extends Fragment {
                     public void onResponse(@NonNull Call<List<ResShowNovel>> call,
                                            @NonNull Response<List<ResShowNovel>> response) {
                         if (response.isSuccessful()){
-//                            Toast.makeText(getContext(), "Sukses", Toast.LENGTH_SHORT).show();
                             //get all data Novel from API SERVICE
                             assert response.body() != null;
                             resShowNovels.clear();
                             resShowNovels.addAll(response.body());
                             setAdapterNewNovel();
                         }else {
-//                            Toast.makeText(getContext(), "Response Gagal", Toast.LENGTH_SHORT).show();
                         }
                     }
 

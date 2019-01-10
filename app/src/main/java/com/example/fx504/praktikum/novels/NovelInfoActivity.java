@@ -13,13 +13,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.fx504.praktikum.R;
+import com.example.fx504.praktikum.adapter.FavoriteAdapter;
 import com.example.fx504.praktikum.api.APIClient;
 import com.example.fx504.praktikum.api.APIService;
 import com.example.fx504.praktikum.api.APIUrl;
+import com.example.fx504.praktikum.fragment.FragmentHome;
 import com.example.fx504.praktikum.model.ResGetById;
 import com.example.fx504.praktikum.model.RespAddFavorite;
 import com.example.fx504.praktikum.model.RespDeleteFav;
+import com.example.fx504.praktikum.model.RespFavorite;
 import com.example.fx504.praktikum.model.SharePref;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +45,7 @@ public class NovelInfoActivity extends AppCompatActivity {
 
     int id_novel;
     int id_member;
-    int status_fav=-1;
+    int status_fav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +59,7 @@ public class NovelInfoActivity extends AppCompatActivity {
         id_novel  = getIntent().getIntExtra("id_novel",0);
         id_member = sharePref.getDataInt(SharePref.KEY_ID);
 
-        Toast.makeText(this, "M "+id_member+"  V  "+id_novel, Toast.LENGTH_SHORT).show();
+        status_fav = getIntent().getIntExtra("favorited",0);
 
 
         iv_NovelCover   = findViewById(R.id.iv_novelCover);
@@ -83,6 +89,12 @@ public class NovelInfoActivity extends AppCompatActivity {
     }
 
     public void setButtonFav(){
+        if (status_fav == 1){
+            setFavorite();
+        }else {
+            status_fav = -1;
+        }
+
         btn_setFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -62,7 +62,6 @@ public class NewNovelAdapter extends RecyclerView.Adapter<NewNovelAdapter.ViewHo
             public void onClick(View v) {
                 Intent intent = new Intent(viewHolder.itemView.getContext(), NovelInfoActivity.class);
                 intent.putExtra("id_novel",viewHolder.id_novel);
-                Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+resShowNovel.getNovelTitle(), Toast.LENGTH_SHORT).show();
 
                 viewHolder.itemView.getContext().startActivity(intent);
             }

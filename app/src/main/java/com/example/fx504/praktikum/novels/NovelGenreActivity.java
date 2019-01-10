@@ -32,9 +32,6 @@ public class NovelGenreActivity extends AppCompatActivity {
 
     APIService apiService;
 
-    NewNovelAdapter newNovelAdapter;
-    List<ResShowNovel> resShowNovels = new ArrayList<>();
-
     GenreAdapter genreAdapter;
     List<RespGenre> respGenres = new ArrayList<>();
 
@@ -78,24 +75,24 @@ public class NovelGenreActivity extends AppCompatActivity {
                    @Override
                    public void onResponse(Call<List<RespGenre>> call, Response<List<RespGenre>> response) {
                        respGenres.clear();
+                       assert response.body() != null;
                        respGenres.addAll(response.body());
                        setAdapter();
-                       Toast.makeText(NovelGenreActivity.this, "Yes", Toast.LENGTH_SHORT).show();
                    }
 
                    @Override
                    public void onFailure(Call<List<RespGenre>> call, Throwable t) {
-                       Log.d("kosong", t.getMessage());
+                       Log.d("kosong","pesannya :"+ t.getMessage());
                        Toast.makeText(NovelGenreActivity.this, "Nyerah", Toast.LENGTH_SHORT).show();
                    }
                });
     }
 
     public void setAdapter(){
-        newNovelAdapter = new NewNovelAdapter(this,resShowNovels);
+        genreAdapter = new GenreAdapter(this,respGenres);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,3);
         rv_genre.setLayoutManager(layoutManager);
-        rv_genre.setAdapter(newNovelAdapter);
+        rv_genre.setAdapter(genreAdapter);
     }
 
     public void button_genre(final Button btn, final String genre){

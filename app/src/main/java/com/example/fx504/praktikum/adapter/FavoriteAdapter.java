@@ -63,7 +63,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             public void onClick(View v) {
                 Intent intent = new Intent(viewHolder.itemView.getContext(), NovelInfoActivity.class);
                 intent.putExtra("id_novel",viewHolder.id_novel);
-//                Toast.makeText(context, ""+viewHolder.id_novel+"  Title :"+ respFavMember.getNovelTitle(), Toast.LENGTH_SHORT).show();
+                intent.putExtra("favorited",1);
                 viewHolder.itemView.getContext().startActivity(intent);
             }
         });
